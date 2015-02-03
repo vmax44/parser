@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="ParserDataDataSet" targetNamespace="http://tempuri.org/ParserDataDataSet.xsd" xmlns:mstns="http://tempuri.org/ParserDataDataSet.xsd" xmlns="http://tempuri.org/ParserDataDataSet.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections>
+          <Connection AppSettingsObjectName="Settings" AppSettingsPropertyName="ParserDataConnectionString" ConnectionStringObject="" IsAppSettingsProperty="true" Modifier="Assembly" Name="ParserDataConnectionString (Settings)" ParameterPrefix="@" PropertyReference="ApplicationSettings.WindowsFormsApplication1.Properties.Settings.GlobalReference.Default.ParserDataConnectionString" Provider="Microsoft.SqlServerCe.Client.3.5" />
+        </Connections>
+        <Tables>
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="ParsedDataTableAdapter" GeneratorDataComponentClassName="ParsedDataTableAdapter" Name="ParsedData" UserDataComponentName="ParsedDataTableAdapter">
+            <MainSource>
+              <DbSource ConnectionRef="ParserDataConnectionString (Settings)" DbObjectName="ParsedData" DbObjectType="Table" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="false" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetData" UserSourceName="Fill">
+                <SelectCommand>
+                  <DbCommand CommandType="Text" ModifiedByUser="false">
+                    <CommandText>SELECT [original], [manufacturer], [partnumber], [desc], [statistic], [price] FROM [ParsedData]</CommandText>
+                    <Parameters />
+                  </DbCommand>
+                </SelectCommand>
+              </DbSource>
+            </MainSource>
+            <Mappings>
+              <Mapping SourceColumn="original" DataSetColumn="original" />
+              <Mapping SourceColumn="manufacturer" DataSetColumn="manufacturer" />
+              <Mapping SourceColumn="partnumber" DataSetColumn="partnumber" />
+              <Mapping SourceColumn="desc" DataSetColumn="desc" />
+              <Mapping SourceColumn="statistic" DataSetColumn="statistic" />
+              <Mapping SourceColumn="price" DataSetColumn="price" />
+            </Mappings>
+            <Sources />
+          </TableAdapter>
+        </Tables>
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="ParserDataDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="True" msprop:Generator_DataSetName="ParserDataDataSet" msprop:Generator_UserDSName="ParserDataDataSet">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="ParsedData" msprop:Generator_TableClassName="ParsedDataDataTable" msprop:Generator_TableVarName="tableParsedData" msprop:Generator_TablePropName="ParsedData" msprop:Generator_RowDeletingName="ParsedDataRowDeleting" msprop:Generator_UserTableName="ParsedData" msprop:Generator_RowChangingName="ParsedDataRowChanging" msprop:Generator_RowEvHandlerName="ParsedDataRowChangeEventHandler" msprop:Generator_RowDeletedName="ParsedDataRowDeleted" msprop:Generator_RowEvArgName="ParsedDataRowChangeEvent" msprop:Generator_RowChangedName="ParsedDataRowChanged" msprop:Generator_RowClassName="ParsedDataRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="original" msprop:Generator_ColumnVarNameInTable="columnoriginal" msprop:Generator_ColumnPropNameInRow="original" msprop:Generator_ColumnPropNameInTable="originalColumn" msprop:Generator_UserColumnName="original" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="100" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="manufacturer" msprop:Generator_ColumnVarNameInTable="columnmanufacturer" msprop:Generator_ColumnPropNameInRow="manufacturer" msprop:Generator_ColumnPropNameInTable="manufacturerColumn" msprop:Generator_UserColumnName="manufacturer" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="100" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="partnumber" msprop:Generator_ColumnVarNameInTable="columnpartnumber" msprop:Generator_ColumnPropNameInRow="partnumber" msprop:Generator_ColumnPropNameInTable="partnumberColumn" msprop:Generator_UserColumnName="partnumber" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="100" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="desc" msprop:Generator_ColumnVarNameInTable="columndesc" msprop:Generator_ColumnPropNameInRow="desc" msprop:Generator_ColumnPropNameInTable="descColumn" msprop:Generator_UserColumnName="desc" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="100" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="statistic" msprop:Generator_ColumnVarNameInTable="columnstatistic" msprop:Generator_ColumnPropNameInRow="statistic" msprop:Generator_ColumnPropNameInTable="statisticColumn" msprop:Generator_UserColumnName="statistic" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="100" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="price" msprop:Generator_ColumnVarNameInTable="columnprice" msprop:Generator_ColumnPropNameInRow="price" msprop:Generator_ColumnPropNameInTable="priceColumn" msprop:Generator_UserColumnName="price" type="xs:decimal" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
