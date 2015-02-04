@@ -9,17 +9,17 @@ using System.Threading;
 
 
 
-namespace WindowsFormsApplication1
+namespace Vmax44Parser
 {
 
-    enum PTypeEnum
+    public enum PTypeEnum
     {
         loginPage, basketPage, searchPage, startPage,
         selectManufacturerPage, dataPage, noResultPage,
         unknownPage
     }
 
-    class PType
+    public class PType
     {
         public PTypeEnum pageType;
         public string attribute;
@@ -73,7 +73,7 @@ namespace WindowsFormsApplication1
         }
     }
 
-    class Parser : IE
+    public class Parser : IE
     {
         public List<PType> pagesType;
         public string strEndOfPage;

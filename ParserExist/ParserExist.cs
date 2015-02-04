@@ -9,9 +9,9 @@ using System.Windows.Forms;
 using Excel = Microsoft.Office.Interop.Excel;
 using System.Text.RegularExpressions;
 
-namespace WindowsFormsApplication1
+namespace Vmax44Parser
 {
-    class ParserExist : Parser
+    public class ParserExist : Parser
     {
         public ParserExist(string f = "pass.xlsx")
             : base()
@@ -87,7 +87,7 @@ namespace WindowsFormsApplication1
             return dataColl;
         }
 
-        private decimal summParse(string price_s)
+        public decimal summParse(string price_s)
         {
             decimal price;
             string s;

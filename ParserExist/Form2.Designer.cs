@@ -1,4 +1,4 @@
-﻿namespace WindowsFormsApplication1
+﻿namespace Vmax44Parser
 {
     partial class Form2
     {

@@ -1,4 +1,4 @@
-﻿namespace WindowsFormsApplication1
+﻿namespace Vmax44Parser
 {
     partial class Form1
     {
@@ -142,7 +142,7 @@
             // 
             // dataCollectionBindingSource
             // 
-            this.dataCollectionBindingSource.DataSource = typeof(WindowsFormsApplication1.dataCollection);
+            this.dataCollectionBindingSource.DataSource = typeof(Vmax44Parser.dataCollection);
             // 
             // menuStrip1
             // 

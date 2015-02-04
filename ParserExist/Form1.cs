@@ -20,7 +20,7 @@ using WatiN.Core.UtilityClasses;
 
 
 
-namespace WindowsFormsApplication1
+namespace Vmax44Parser
 {
     
 

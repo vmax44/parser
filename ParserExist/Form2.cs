@@ -8,7 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Windows;
 
-namespace WindowsFormsApplication1
+namespace Vmax44Parser
 {
     public partial class Form2 : Form
     {
