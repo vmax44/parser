@@ -8,7 +8,6 @@ using WatiN.Core.DialogHandlers;
 using System.Threading;
 
 
-
 namespace Vmax44Parser
 {
 

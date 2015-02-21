@@ -75,6 +75,8 @@ namespace Vmax44Parser
             }
         }
 
+
+
         private dataCollection detailParse(ParserExist browser, string detailCode)
         {
             bool done = false;
@@ -160,6 +162,19 @@ namespace Vmax44Parser
         }
 
         private void Form1_Load(object sender, EventArgs e)
+        {
+            // TODO: This line of code loads data into the 'vmax44parserDataSet.ParsedData' table. You can move, or remove it, as needed.
+            this.parsedDataTableAdapter.Fill(this.vmax44parserDataSet.ParsedData);
+            // TODO: This line of code loads data into the 'vmax44parserDataSet.Orders' table. You can move, or remove it, as needed.
+            this.ordersTableAdapter.Fill(this.vmax44parserDataSet.Orders);
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void fKParsedDataOrdersBindingSource_CurrentChanged(object sender, EventArgs e)
         {
 
         }

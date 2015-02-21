@@ -32,5 +32,16 @@ namespace Vmax44Parser.Properties {
                 return ((string)(this["ParserDataConnectionString"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=(local)\\SQLEXPRESS;Initial Catalog=vmax44parser;Integrated Security=T" +
+            "rue")]
+        public string vmax44parserConnectionString {
+            get {
+                return ((string)(this["vmax44parserConnectionString"]));
+            }
+        }
     }
 }

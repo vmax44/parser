@@ -29,7 +29,6 @@ namespace Vmax44Parser
 
             strEndOfPage = "Предложить идею";
             GoToAndWaitFinish("http://exist.ru");
-            //Login(f);
         }
 
         public override void Login(string filePasswords = "pass.xlsx")

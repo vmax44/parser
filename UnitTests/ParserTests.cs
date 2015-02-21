@@ -5,7 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace UnitTests
 {
     [TestClass]
-    public class ParserTests
+    public class ParserExistTests
     {
         [TestMethod]
         public void SummParseTest()
