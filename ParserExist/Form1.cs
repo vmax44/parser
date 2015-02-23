@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.Common;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,8 @@ using WatiN.Core;
 using HtmlAgilityPack;
 using System.Text.RegularExpressions;
 using System.Threading;
+using Vmax44ParserConnectedLayer;
+using System.Configuration;
 
 using Excel = Microsoft.Office.Interop.Excel;
 using WinForm = System.Windows.Forms.Form;
@@ -27,7 +30,8 @@ namespace Vmax44Parser
     public partial class Form1 : WinForm
     {
         public string manufacturer { get; set; }
-        public dataCollection dataBase;
+        public ParsedDataCollection dataBase;
+        
 
         static public void log(string str)
         {
@@ -38,10 +42,20 @@ namespace Vmax44Parser
         {
             InitializeComponent();
             manufacturer = "";
-            dataBase = new dataCollection();
+            dataBase = new ParsedDataCollection();
             dataCollectionBindingSource.DataSource = dataBase;
             dataGridView1.DataSource = dataCollectionBindingSource;
 
+            OrdersDAL sqlbase;
+            sqlbase=new OrdersDAL();
+            sqlbase.OpenConnection(ConfigurationManager.ConnectionStrings[
+                "Vmax44Parser.Properties.Settings.vmax44parserConnectionString"].ToString());
+            DataTable orders=sqlbase.GetAllOrdersAsDataTable();
+            foreach (DataRow row in orders.Rows)
+            {
+                comboBox1.Items.Add(row.Field<string>("OrderNumber"));
+            }
+            sqlbase.CloseConnection();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -77,10 +91,10 @@ namespace Vmax44Parser
 
 
 
-        private dataCollection detailParse(ParserExist browser, string detailCode)
+        private ParsedDataCollection detailParse(ParserExist browser, string detailCode)
         {
             bool done = false;
-            dataCollection result = new dataCollection();
+            ParsedDataCollection result = new ParsedDataCollection();
             while (!done)
             {
                 PTypeEnum pageType = browser.getCurrentPageType();
@@ -100,7 +114,7 @@ namespace Vmax44Parser
 
                     case PTypeEnum.noResultPage:
                         //result = "no result;;"+detailCode+";;;";
-                        result.Add(new data()
+                        result.Add(new ParsedData()
                         {
                             orig = "no result",
                             firmname = "",
@@ -177,6 +191,19 @@ namespace Vmax44Parser
         private void fKParsedDataOrdersBindingSource_CurrentChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            OrdersDAL sqlbase;
+            sqlbase = new OrdersDAL();
+            sqlbase.OpenConnection(ConfigurationManager.ConnectionStrings[
+                "Vmax44Parser.Properties.Settings.vmax44parserConnectionString"].ToString());
+            int orderid = sqlbase.LookUpOrderId(comboBox1.SelectedItem.ToString());
+
+            sqlbase.InsertParsedDataCollection(orderid, dataBase);
+
+            sqlbase.CloseConnection();
         }
 
     }

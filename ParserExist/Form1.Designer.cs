@@ -53,20 +53,7 @@
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.dataGridView2 = new System.Windows.Forms.DataGridView();
             this.dataGridView3 = new System.Windows.Forms.DataGridView();
-            this.vmax44parserDataSet = new Vmax44Parser.vmax44parserDataSet();
-            this.vmax44parserDataSetBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.ordersBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.ordersTableAdapter = new Vmax44Parser.vmax44parserDataSetTableAdapters.OrdersTableAdapter();
-            this.idDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.orderNumberDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.clientNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.clientCarDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.orderDateDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dTPDateDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.fKParsedDataOrdersBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.parsedDataTableAdapter = new Vmax44Parser.vmax44parserDataSetTableAdapters.ParsedDataTableAdapter();
             this.idDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.orderIdDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.parseDateDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -77,18 +64,31 @@
             this.descriptionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.fKParsedDataOrdersBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.ordersBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.vmax44parserDataSet = new Vmax44Parser.vmax44parserDataSet();
+            this.dataGridView2 = new System.Windows.Forms.DataGridView();
+            this.idDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.orderNumberDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.clientNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.clientCarDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.orderDateDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dTPDateDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.vmax44parserDataSetBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.ordersTableAdapter = new Vmax44Parser.vmax44parserDataSetTableAdapters.OrdersTableAdapter();
+            this.parsedDataTableAdapter = new Vmax44Parser.vmax44parserDataSetTableAdapters.ParsedDataTableAdapter();
             ((System.ComponentModel.ISupportInitialize)(this.dataCollectionBindingSource)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.tabPage2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.vmax44parserDataSet)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.vmax44parserDataSetBindingSource)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ordersBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fKParsedDataOrdersBindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ordersBindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.vmax44parserDataSet)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.vmax44parserDataSetBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // button1
@@ -210,6 +210,7 @@
             this.button2.TabIndex = 10;
             this.button2.Text = "Add to database";
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // label3
             // 
@@ -298,23 +299,6 @@
             this.tabPage2.Text = "Database";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // dataGridView2
-            // 
-            this.dataGridView2.AutoGenerateColumns = false;
-            this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView2.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.idDataGridViewTextBoxColumn,
-            this.orderNumberDataGridViewTextBoxColumn,
-            this.clientNameDataGridViewTextBoxColumn,
-            this.clientCarDataGridViewTextBoxColumn,
-            this.orderDateDataGridViewTextBoxColumn,
-            this.dTPDateDataGridViewTextBoxColumn});
-            this.dataGridView2.DataSource = this.ordersBindingSource;
-            this.dataGridView2.Location = new System.Drawing.Point(0, 0);
-            this.dataGridView2.Name = "dataGridView2";
-            this.dataGridView2.Size = new System.Drawing.Size(775, 101);
-            this.dataGridView2.TabIndex = 0;
-            // 
             // dataGridView3
             // 
             this.dataGridView3.AutoGenerateColumns = false;
@@ -335,72 +319,6 @@
             this.dataGridView3.Name = "dataGridView3";
             this.dataGridView3.Size = new System.Drawing.Size(783, 247);
             this.dataGridView3.TabIndex = 1;
-            // 
-            // vmax44parserDataSet
-            // 
-            this.vmax44parserDataSet.DataSetName = "vmax44parserDataSet";
-            this.vmax44parserDataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
-            // 
-            // vmax44parserDataSetBindingSource
-            // 
-            this.vmax44parserDataSetBindingSource.DataSource = this.vmax44parserDataSet;
-            this.vmax44parserDataSetBindingSource.Position = 0;
-            // 
-            // ordersBindingSource
-            // 
-            this.ordersBindingSource.DataMember = "Orders";
-            this.ordersBindingSource.DataSource = this.vmax44parserDataSet;
-            // 
-            // ordersTableAdapter
-            // 
-            this.ordersTableAdapter.ClearBeforeFill = true;
-            // 
-            // idDataGridViewTextBoxColumn
-            // 
-            this.idDataGridViewTextBoxColumn.DataPropertyName = "Id";
-            this.idDataGridViewTextBoxColumn.HeaderText = "Id";
-            this.idDataGridViewTextBoxColumn.Name = "idDataGridViewTextBoxColumn";
-            this.idDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // orderNumberDataGridViewTextBoxColumn
-            // 
-            this.orderNumberDataGridViewTextBoxColumn.DataPropertyName = "OrderNumber";
-            this.orderNumberDataGridViewTextBoxColumn.HeaderText = "OrderNumber";
-            this.orderNumberDataGridViewTextBoxColumn.Name = "orderNumberDataGridViewTextBoxColumn";
-            // 
-            // clientNameDataGridViewTextBoxColumn
-            // 
-            this.clientNameDataGridViewTextBoxColumn.DataPropertyName = "ClientName";
-            this.clientNameDataGridViewTextBoxColumn.HeaderText = "ClientName";
-            this.clientNameDataGridViewTextBoxColumn.Name = "clientNameDataGridViewTextBoxColumn";
-            // 
-            // clientCarDataGridViewTextBoxColumn
-            // 
-            this.clientCarDataGridViewTextBoxColumn.DataPropertyName = "ClientCar";
-            this.clientCarDataGridViewTextBoxColumn.HeaderText = "ClientCar";
-            this.clientCarDataGridViewTextBoxColumn.Name = "clientCarDataGridViewTextBoxColumn";
-            // 
-            // orderDateDataGridViewTextBoxColumn
-            // 
-            this.orderDateDataGridViewTextBoxColumn.DataPropertyName = "OrderDate";
-            this.orderDateDataGridViewTextBoxColumn.HeaderText = "OrderDate";
-            this.orderDateDataGridViewTextBoxColumn.Name = "orderDateDataGridViewTextBoxColumn";
-            // 
-            // dTPDateDataGridViewTextBoxColumn
-            // 
-            this.dTPDateDataGridViewTextBoxColumn.DataPropertyName = "DTPDate";
-            this.dTPDateDataGridViewTextBoxColumn.HeaderText = "DTPDate";
-            this.dTPDateDataGridViewTextBoxColumn.Name = "dTPDateDataGridViewTextBoxColumn";
-            // 
-            // fKParsedDataOrdersBindingSource
-            // 
-            this.fKParsedDataOrdersBindingSource.DataMember = "FK_ParsedData_Orders";
-            this.fKParsedDataOrdersBindingSource.DataSource = this.ordersBindingSource;
-            this.fKParsedDataOrdersBindingSource.CurrentChanged += new System.EventHandler(this.fKParsedDataOrdersBindingSource_CurrentChanged);
-            // 
-            // parsedDataTableAdapter
-            // 
-            this.parsedDataTableAdapter.ClearBeforeFill = true;
             // 
             // idDataGridViewTextBoxColumn1
             // 
@@ -463,6 +381,89 @@
             this.dataGridViewTextBoxColumn2.HeaderText = "Price";
             this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
             // 
+            // fKParsedDataOrdersBindingSource
+            // 
+            this.fKParsedDataOrdersBindingSource.DataMember = "FK_ParsedData_Orders";
+            this.fKParsedDataOrdersBindingSource.DataSource = this.ordersBindingSource;
+            this.fKParsedDataOrdersBindingSource.CurrentChanged += new System.EventHandler(this.fKParsedDataOrdersBindingSource_CurrentChanged);
+            // 
+            // ordersBindingSource
+            // 
+            this.ordersBindingSource.DataMember = "Orders";
+            this.ordersBindingSource.DataSource = this.vmax44parserDataSet;
+            // 
+            // vmax44parserDataSet
+            // 
+            this.vmax44parserDataSet.DataSetName = "vmax44parserDataSet";
+            this.vmax44parserDataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
+            // 
+            // dataGridView2
+            // 
+            this.dataGridView2.AutoGenerateColumns = false;
+            this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView2.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.idDataGridViewTextBoxColumn,
+            this.orderNumberDataGridViewTextBoxColumn,
+            this.clientNameDataGridViewTextBoxColumn,
+            this.clientCarDataGridViewTextBoxColumn,
+            this.orderDateDataGridViewTextBoxColumn,
+            this.dTPDateDataGridViewTextBoxColumn});
+            this.dataGridView2.DataSource = this.ordersBindingSource;
+            this.dataGridView2.Location = new System.Drawing.Point(0, 0);
+            this.dataGridView2.Name = "dataGridView2";
+            this.dataGridView2.Size = new System.Drawing.Size(775, 101);
+            this.dataGridView2.TabIndex = 0;
+            // 
+            // idDataGridViewTextBoxColumn
+            // 
+            this.idDataGridViewTextBoxColumn.DataPropertyName = "Id";
+            this.idDataGridViewTextBoxColumn.HeaderText = "Id";
+            this.idDataGridViewTextBoxColumn.Name = "idDataGridViewTextBoxColumn";
+            this.idDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // orderNumberDataGridViewTextBoxColumn
+            // 
+            this.orderNumberDataGridViewTextBoxColumn.DataPropertyName = "OrderNumber";
+            this.orderNumberDataGridViewTextBoxColumn.HeaderText = "OrderNumber";
+            this.orderNumberDataGridViewTextBoxColumn.Name = "orderNumberDataGridViewTextBoxColumn";
+            // 
+            // clientNameDataGridViewTextBoxColumn
+            // 
+            this.clientNameDataGridViewTextBoxColumn.DataPropertyName = "ClientName";
+            this.clientNameDataGridViewTextBoxColumn.HeaderText = "ClientName";
+            this.clientNameDataGridViewTextBoxColumn.Name = "clientNameDataGridViewTextBoxColumn";
+            // 
+            // clientCarDataGridViewTextBoxColumn
+            // 
+            this.clientCarDataGridViewTextBoxColumn.DataPropertyName = "ClientCar";
+            this.clientCarDataGridViewTextBoxColumn.HeaderText = "ClientCar";
+            this.clientCarDataGridViewTextBoxColumn.Name = "clientCarDataGridViewTextBoxColumn";
+            // 
+            // orderDateDataGridViewTextBoxColumn
+            // 
+            this.orderDateDataGridViewTextBoxColumn.DataPropertyName = "OrderDate";
+            this.orderDateDataGridViewTextBoxColumn.HeaderText = "OrderDate";
+            this.orderDateDataGridViewTextBoxColumn.Name = "orderDateDataGridViewTextBoxColumn";
+            // 
+            // dTPDateDataGridViewTextBoxColumn
+            // 
+            this.dTPDateDataGridViewTextBoxColumn.DataPropertyName = "DTPDate";
+            this.dTPDateDataGridViewTextBoxColumn.HeaderText = "DTPDate";
+            this.dTPDateDataGridViewTextBoxColumn.Name = "dTPDateDataGridViewTextBoxColumn";
+            // 
+            // vmax44parserDataSetBindingSource
+            // 
+            this.vmax44parserDataSetBindingSource.DataSource = this.vmax44parserDataSet;
+            this.vmax44parserDataSetBindingSource.Position = 0;
+            // 
+            // ordersTableAdapter
+            // 
+            this.ordersTableAdapter.ClearBeforeFill = true;
+            // 
+            // parsedDataTableAdapter
+            // 
+            this.parsedDataTableAdapter.ClearBeforeFill = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -489,12 +490,12 @@
             this.tabPage1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.tabPage2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.vmax44parserDataSet)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.vmax44parserDataSetBindingSource)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ordersBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.fKParsedDataOrdersBindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ordersBindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.vmax44parserDataSet)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.vmax44parserDataSetBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

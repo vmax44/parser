@@ -8,6 +8,7 @@ using System.IO;
 using System.Windows.Forms;
 using Excel = Microsoft.Office.Interop.Excel;
 using System.Text.RegularExpressions;
+using Vmax44ParserConnectedLayer;
 
 namespace Vmax44Parser
 {
@@ -49,12 +50,12 @@ namespace Vmax44Parser
             }
         }
 
-        public dataCollection ParsePage()
+        public ParsedDataCollection ParsePage()
         {
             HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
             var h = this.GetHTML();
             doc.LoadHtml(h);
-            dataCollection dataColl = new dataCollection();
+            ParsedDataCollection dataColl = new ParsedDataCollection();
             string orig="",firmname="", art="", desc="", statistic="",price_s="";
             decimal price;
             
@@ -74,7 +75,7 @@ namespace Vmax44Parser
                 PutParsedData(item,".//td[@class='price']",ref price_s);
 
                 price = summParse(price_s);
-                data original = new data();
+                ParsedData original = new ParsedData();
                 original.orig = orig;
                 original.firmname = firmname;
                 original.art = art;

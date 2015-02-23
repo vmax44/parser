@@ -6,6 +6,9 @@ using System.Text;
 using WatiN.Core;
 using WatiN.Core.DialogHandlers;
 using System.Threading;
+using System.Configuration;
+using System.Data;
+using System.Data.Common;
 
 
 namespace Vmax44Parser
@@ -24,53 +27,9 @@ namespace Vmax44Parser
         public string attribute;
     }
 
-    public class data
-    {
-        public string orig { get; set; }
-        public string firmname { get; set; }
-        public string art { get; set; }
-        public string desc { get; set; }
-        public string statistic { get; set; }
-        public decimal price { get; set; }
 
 
-        public override string ToString()
-        {
-            StringBuilder s = new StringBuilder();
-            s.Append(orig != null ? orig : "");
-            s.Append(";").Append(firmname != null ? firmname : "");
-            s.Append(";").Append(art != null ? art : "");
-            s.Append(";").Append(desc != null ? desc : "");
-            s.Append(";").Append(statistic != null ? statistic : "");
-            s.Append(";").Append(price.ToString());
-            return s.ToString();
-        }
 
-        public data Copy()
-        {
-            data tmp = new data();
-            tmp.orig = this.orig;
-            tmp.firmname = this.firmname;
-            tmp.art = this.art;
-            tmp.desc = this.desc;
-            tmp.statistic = this.statistic;
-            tmp.price = this.price;
-            return tmp;
-        }
-    }
-
-    public class dataCollection : List<data>
-    {
-        public override string ToString()
-        {
-            StringBuilder s = new StringBuilder();
-            foreach (data d in this)
-            {
-                s.AppendLine(d.ToString());
-            }
-            return s.ToString();
-        }
-    }
 
     public class Parser : IE
     {
