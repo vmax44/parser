@@ -82,12 +82,14 @@ namespace Vmax44Parser
                 original.desc = desc;
                 original.statistic = statistic;
                 original.price = price;
+                original.parsertype = "Exist.ru";
+                original.url = this.Url;
                 dataColl.Add(original);
             }
             return dataColl;
         }
 
-        public decimal summParse(string price_s)
+        private decimal summParse(string price_s)
         {
             decimal price;
             string s;

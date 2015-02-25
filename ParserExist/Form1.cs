@@ -146,8 +146,11 @@ namespace Vmax44Parser
                         browser.ClickAndWaitFinish(Find.ByValue("Найти"));
                         browser.WaitText(detailCode);
                         break;
-
                 }
+            }
+            foreach(var p in result)
+            {
+                p.searchedArtikul = detailCode;
             }
             return result;
         }

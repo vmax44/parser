@@ -17,18 +17,25 @@ namespace Vmax44ParserConnectedLayer
 
     public class ParsedData
     {
+        public int parseddataid { get; set; }
+        public int orderid { get; set; }
         public string orig { get; set; }
         public string firmname { get; set; }
+        public string searchedArtikul { get; set; }
         public string art { get; set; }
         public string desc { get; set; }
         public string statistic { get; set; }
         public decimal price { get; set; }
+        public string parsertype { get; set; }
+        public string url { get; set; }
+        
 
 
         public override string ToString()
         {
             StringBuilder s = new StringBuilder();
             s.Append(orig != null ? orig : "");
+            s.Append(";").Append(parsertype != null ? parsertype : "");
             s.Append(";").Append(firmname != null ? firmname : "");
             s.Append(";").Append(art != null ? art : "");
             s.Append(";").Append(desc != null ? desc : "");
@@ -40,6 +47,7 @@ namespace Vmax44ParserConnectedLayer
         public ParsedData Copy()
         {
             ParsedData tmp = new ParsedData();
+            tmp.parsertype = this.parsertype;
             tmp.orig = this.orig;
             tmp.firmname = this.firmname;
             tmp.art = this.art;
@@ -119,14 +127,30 @@ namespace Vmax44ParserConnectedLayer
         public void InsertParsedData(int OrderId, ParsedData d)
         {
             string sql = string.Format("insert Into ParsedData " +
-                "(OrderId, ParseDate, ParserType, Original, Firmname, Artikul, Description,Statistic, Price) values " +
-                "(@OrderId,@ParseDate,@ParserType,@Original,@Firmname,@Artikul,@Description,@Statistic,@Price)");
+                "(OrderId, ParseDate, ParserType, Original, Firmname, Artikul, Description,Statistic,Price,"+
+                "SearchedArtikul,Url) values " +
+                "(@OrderId,@ParseDate,@ParserType,@Original,@Firmname,@Artikul,@Description,@Statistic,@Price,"+
+                "@SearchedArtikul,@Url)");
             using (SqlCommand cmd=new SqlCommand(sql,this.sqlCn))
             {
                 SqlParameter p = new SqlParameter();
                 p.ParameterName = "@OrderId";
                 p.Value = OrderId;
                 p.SqlDbType = SqlDbType.Int;
+                cmd.Parameters.Add(p);
+
+                p = new SqlParameter();
+                p.ParameterName = "@SearchedArtikul";
+                p.Value = d.searchedArtikul;
+                p.SqlDbType = SqlDbType.NChar;
+                p.Size = 20;
+                cmd.Parameters.Add(p);
+
+                p = new SqlParameter();
+                p.ParameterName = "@Url";
+                p.Value = d.url;
+                p.SqlDbType = SqlDbType.NChar;
+                p.Size = 300;
                 cmd.Parameters.Add(p);
 
                 p = new SqlParameter();
@@ -137,37 +161,37 @@ namespace Vmax44ParserConnectedLayer
 
                 p = new SqlParameter();
                 p.ParameterName = "@ParserType";
-                p.Value = "exist";
+                p.Value = d.parsertype;
                 p.SqlDbType = SqlDbType.NChar;
-                p.Size = 10;
+                p.Size = 20;
                 cmd.Parameters.Add(p);
 
                 p = new SqlParameter();
                 p.ParameterName = "@Original";
                 p.Value = d.orig;
                 p.SqlDbType = SqlDbType.NChar;
-                p.Size = 10;
+                p.Size = 20;
                 cmd.Parameters.Add(p);
 
                 p = new SqlParameter();
                 p.ParameterName = "@Firmname";
                 p.Value = d.firmname;
                 p.SqlDbType = SqlDbType.NChar;
-                p.Size = 10;
+                p.Size = 20;
                 cmd.Parameters.Add(p);
 
                 p = new SqlParameter();
                 p.ParameterName = "@Artikul";
                 p.Value = d.art;
                 p.SqlDbType = SqlDbType.NChar;
-                p.Size = 10;
+                p.Size = 20;
                 cmd.Parameters.Add(p);
 
                 p = new SqlParameter();
                 p.ParameterName = "@Description";
                 p.Value = d.desc;
                 p.SqlDbType = SqlDbType.NChar;
-                p.Size = 10;
+                p.Size = 300;
                 cmd.Parameters.Add(p);
 
                 p = new SqlParameter();
@@ -181,6 +205,8 @@ namespace Vmax44ParserConnectedLayer
                 p.ParameterName = "@Price";
                 p.Value = d.price;
                 p.SqlDbType = SqlDbType.Decimal;
+                p.Precision = 8;
+                p.Scale = 2;
                 cmd.Parameters.Add(p);
 
                 cmd.ExecuteNonQuery();
