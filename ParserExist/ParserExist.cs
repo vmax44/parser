@@ -17,6 +17,7 @@ namespace Vmax44Parser
         public ParserExist(string f = "pass.xlsx")
             : base()
         {
+            this.ParserType = "Exist.ru";
 
             pagesType = new List<PType>
             {   
@@ -50,7 +51,7 @@ namespace Vmax44Parser
             }
         }
 
-        public ParsedDataCollection ParsePage()
+        public override ParsedDataCollection ParsePage()
         {
             HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
             var h = this.GetHTML();
@@ -89,26 +90,6 @@ namespace Vmax44Parser
             return dataColl;
         }
 
-        private decimal summParse(string price_s)
-        {
-            decimal price;
-            string s;
-            log("Преобразование цены - " + price_s+" = ");
-            s = price_s.Replace(",", ".");  //меняем все запятые на точки
-            s = Regex.Replace(s, @"[^0-9.]", ""); //удаляем все символы кроме цифр и точек
-            s = Regex.Match(s, @"[0-9.]+\.[0-9]+").ToString(); //удаляем все символы кроме цифр и точек
-            if (Decimal.TryParse(s, out price))
-            {
-                log("Преобразование цены прошло успешно");
-            }
-            else
-            {
-                log("Ошибка при преобразовании цены");
-            }
-            log(price.ToString());
-            return price;
-        }
-
         private void PutParsedData(HtmlAgilityPack.HtmlNode item, string XPath, ref string to)
         {
             string tmp = GetNodeText(item, XPath);
@@ -126,7 +107,7 @@ namespace Vmax44Parser
                 return "";
         }
 
-        public void ClickManufacturer(string manufacturer)
+        public override void ClickManufacturer(string manufacturer)
         {
             this.Div(Find.ByText(manufacturer).And(Find.ByClass("firmname"))).ClickNoWait();
             this.WaitFinish();

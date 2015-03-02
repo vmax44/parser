@@ -91,7 +91,7 @@ namespace Vmax44Parser
 
 
 
-        private ParsedDataCollection detailParse(ParserExist browser, string detailCode)
+        private ParsedDataCollection detailParse(Parser browser, string detailCode)
         {
             bool done = false;
             ParsedDataCollection result = new ParsedDataCollection();
@@ -121,7 +121,9 @@ namespace Vmax44Parser
                             art = detailCode,
                             desc = "",
                             statistic = "",
-                            price = 0
+                            price = 0,
+                            url="",
+                            parsertype=browser.ParserType
                         });
                         browser.GoToAndWaitFinish("http://exist.ru");
                         Thread.Sleep(100);

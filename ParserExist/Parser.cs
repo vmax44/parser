@@ -9,6 +9,8 @@ using System.Threading;
 using System.Configuration;
 using System.Data;
 using System.Data.Common;
+using Vmax44ParserConnectedLayer;
+using System.Text.RegularExpressions;
 
 
 namespace Vmax44Parser
@@ -27,22 +29,20 @@ namespace Vmax44Parser
         public string attribute;
     }
 
-
-
-
-
-    public class Parser : IE
+    abstract public class Parser : IE
     {
         public List<PType> pagesType;
         public string strEndOfPage;
+        public string ParserType;
 
-        public Parser()
-            : base()
-        {
+        public Parser() : base()
+        { }
 
-        }
+        public abstract void Login(string filePasswords = "pass.xlsx");
 
-        public virtual void Login(string filePasswords = "pass.xlsx") { }
+        public abstract ParsedDataCollection ParsePage();
+
+        public abstract void ClickManufacturer(string manufacturer);
 
         public virtual bool isPageType(PTypeEnum type)
         {
@@ -100,6 +100,32 @@ namespace Vmax44Parser
                 }
             }
             return page;
+        }
+
+        /// <summary>
+        /// Преобразует число, переданное в строке совместно с нецифровыми символами и возвращает в формате 
+        /// decimal
+        /// </summary>
+        /// <param name="price_s">Строка, содержащая число</param>
+        /// <returns>Число в формате decimal</returns>
+        protected decimal summParse(string price_s)
+        {
+            decimal price;
+            string s;
+            log("Преобразование цены - " + price_s + " = ");
+            s = price_s.Replace(",", ".");  //меняем все запятые на точки
+            s = Regex.Replace(s, @"[^0-9.]", ""); //удаляем все символы кроме цифр и точек
+            s = Regex.Match(s, @"[0-9.]+\.[0-9]+").ToString(); //удаляем все символы кроме цифр и точек
+            if (Decimal.TryParse(s, out price))
+            {
+                log("Преобразование цены прошло успешно");
+            }
+            else
+            {
+                log("Ошибка при преобразовании цены");
+            }
+            log(price.ToString());
+            return price;
         }
 
         public bool ClickAndWaitFinish(WatiN.Core.Constraints.Constraint elem)
