@@ -84,6 +84,7 @@
       <DependentUpon>Form2.cs</DependentUpon>
     </Compile>
     <Compile Include="Parser.cs" />
+    <Compile Include="ParserAutodoc.cs" />
     <Compile Include="ParserExist.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>

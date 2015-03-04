@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using WatiN.Core;
-using WatForm = WatiN.Core.Form;
 using System.IO;
 using System.Windows.Forms;
 using Excel = Microsoft.Office.Interop.Excel;
-using System.Text.RegularExpressions;
 using Vmax44ParserConnectedLayer;
 using HtmlAgilityPack;
 using System.Threading;
@@ -134,7 +130,7 @@ namespace Vmax44Parser
             return res;
         }
 
-        public override ParsedDataCollection ParsePage()
+        private ParsedDataCollection ParsePage()
         {
             HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
             var h = this.GetHTML();
@@ -190,7 +186,7 @@ namespace Vmax44Parser
                 return "";
         }
 
-        public override void ClickManufacturer(string manufacturer)
+        private void ClickManufacturer(string manufacturer)
         {
             this.Div(Find.ByText(manufacturer).And(Find.ByClass("firmname"))).ClickNoWait();
             this.WaitFinish();

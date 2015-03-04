@@ -1,25 +1,14 @@
 ﻿using System.Diagnostics;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Data.Common;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using System.IO;
-using WatiN.Core;
-using HtmlAgilityPack;
-using System.Text.RegularExpressions;
-using System.Threading;
 using Vmax44ParserConnectedLayer;
 using System.Configuration;
 
 using Excel = Microsoft.Office.Interop.Excel;
 using WinForm = System.Windows.Forms.Form;
-using WatForm = WatiN.Core.Form;
-using WatiN.Core.UtilityClasses;
 
 
 
@@ -57,9 +46,9 @@ namespace Vmax44Parser
         private void button1_Click(object sender, EventArgs e)
         {
             string detailCode = "";
-            using (var browser = new ParserExist())
+            using (var browser = new ParserAutodoc())
             {
-                browser.Visible = false;
+                //browser.Visible = false;
                 browser.GetSelectedManufacturer = SelectFromStringList;
                 Excel.Application codesEx = new Excel.Application();
 

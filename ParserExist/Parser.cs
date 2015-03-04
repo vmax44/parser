@@ -1,14 +1,8 @@
 ﻿using System.Diagnostics;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using WatiN.Core;
-using WatiN.Core.DialogHandlers;
 using System.Threading;
-using System.Configuration;
-using System.Data;
-using System.Data.Common;
 using Vmax44ParserConnectedLayer;
 using System.Text.RegularExpressions;
 
@@ -47,9 +41,9 @@ namespace Vmax44Parser
 
         public abstract void Login(string filePasswords = "pass.xlsx");
 
-        public abstract ParsedDataCollection ParsePage();
+        //public abstract ParsedDataCollection ParsePage();
 
-        public abstract void ClickManufacturer(string manufacturer);
+        //public abstract void ClickManufacturer(string manufacturer);
 
         public abstract ParsedDataCollection detailParse(string detailCode);
 
