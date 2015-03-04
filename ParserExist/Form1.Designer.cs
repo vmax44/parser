@@ -274,7 +274,7 @@
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.Size = new System.Drawing.Size(764, 216);
             this.dataGridView1.TabIndex = 8;
-            this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
+            //this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             // 
             // textBox1
             // 
@@ -385,7 +385,7 @@
             // 
             this.fKParsedDataOrdersBindingSource.DataMember = "FK_ParsedData_Orders";
             this.fKParsedDataOrdersBindingSource.DataSource = this.ordersBindingSource;
-            this.fKParsedDataOrdersBindingSource.CurrentChanged += new System.EventHandler(this.fKParsedDataOrdersBindingSource_CurrentChanged);
+            //this.fKParsedDataOrdersBindingSource.CurrentChanged += new System.EventHandler(this.fKParsedDataOrdersBindingSource_CurrentChanged);
             // 
             // ordersBindingSource
             // 

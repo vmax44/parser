@@ -29,9 +29,7 @@ namespace Vmax44Parser
 
     public partial class Form1 : WinForm
     {
-        public string manufacturer { get; set; }
         public ParsedDataCollection dataBase;
-        
 
         static public void log(string str)
         {
@@ -41,13 +39,11 @@ namespace Vmax44Parser
         public Form1()
         {
             InitializeComponent();
-            manufacturer = "";
             dataBase = new ParsedDataCollection();
             dataCollectionBindingSource.DataSource = dataBase;
             dataGridView1.DataSource = dataCollectionBindingSource;
 
-            OrdersDAL sqlbase;
-            sqlbase=new OrdersDAL();
+            OrdersDAL sqlbase=new OrdersDAL();
             sqlbase.OpenConnection(ConfigurationManager.ConnectionStrings[
                 "Vmax44Parser.Properties.Settings.vmax44parserConnectionString"].ToString());
             DataTable orders=sqlbase.GetAllOrdersAsDataTable();
@@ -64,24 +60,24 @@ namespace Vmax44Parser
             using (var browser = new ParserExist())
             {
                 browser.Visible = false;
+                browser.GetSelectedManufacturer = SelectFromStringList;
                 Excel.Application codesEx = new Excel.Application();
 
                 codesEx.Workbooks.Open(Path.Combine(Application.StartupPath, "code.xlsx"));
 
                 var row = 1;
-
-
+                
                 while ((codesEx.Cells[row, 2].Value!=null)&&(codesEx.Cells[row,2].Value!=""))
                 {
                     detailCode = codesEx.Cells[row, 2].Value;
-                    dataBase.AddRange(detailParse(browser, detailCode));
+                    dataBase.AddRange(browser.detailParse(detailCode));
                     row++;
                 }
 
                 codesEx.ActiveWorkbook.Close();
                 codesEx.Quit();
 
-                browser.Close();
+                //browser.Close();
                 var tmp=dataCollectionBindingSource.ToString();
 
                 dataCollectionBindingSource.ResetBindings(false);
@@ -89,86 +85,10 @@ namespace Vmax44Parser
             }
         }
 
-
-
-        private ParsedDataCollection detailParse(Parser browser, string detailCode)
+        public String SelectFromStringList(List<string> items)
         {
-            bool done = false;
-            ParsedDataCollection result = new ParsedDataCollection();
-            while (!done)
-            {
-                PTypeEnum pageType = browser.getCurrentPageType();
-                label1.Text = pageType.ToString();
-                log("Перешли на страницу " + pageType.ToString());
-
-                switch (pageType)
-                {
-
-                    case PTypeEnum.selectManufacturerPage:
-                        if (manufacturer == "")
-                            manufacturer = SelectManufacturer(browser);
-                        browser.ClickManufacturer(manufacturer);
-                        browser.WaitText("bl=\"-10\"");
-                        log("выбрали и кликнули по " + manufacturer);
-                        break;
-
-                    case PTypeEnum.noResultPage:
-                        //result = "no result;;"+detailCode+";;;";
-                        result.Add(new ParsedData()
-                        {
-                            orig = "no result",
-                            firmname = "",
-                            art = detailCode,
-                            desc = "",
-                            statistic = "",
-                            price = 0,
-                            url="",
-                            parsertype=browser.ParserType
-                        });
-                        browser.GoToAndWaitFinish("http://exist.ru");
-                        Thread.Sleep(100);
-                        done = true;
-                        break;
-
-                    case PTypeEnum.dataPage:
-                        result=browser.ParsePage();
-                        browser.GoToNoWait("http://exist.ru");
-                        Thread.Sleep(100);
-                        browser.WaitUntilText("Запрошенный артикул");
-                        done = true;
-                        break;
-
-                    case PTypeEnum.loginPage:
-                        browser.Login();
-                        break;
-
-                    case PTypeEnum.startPage:
-                    case PTypeEnum.searchPage:
-                        browser.TextField(Find.ByName("pcode")).SetAttributeValue("value", detailCode);
-                        browser.ClickAndWaitFinish(Find.ByValue("Найти"));
-                        browser.WaitText(detailCode);
-                        break;
-                }
-            }
-            foreach(var p in result)
-            {
-                p.searchedArtikul = detailCode;
-            }
-            return result;
-        }
-
-        private string SelectManufacturer(Parser browser) 
-        {
-            HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
-            doc.LoadHtml(browser.Body.OuterHtml);
-            HtmlNodeCollection node = doc.DocumentNode.SelectNodes("//div[@class='firmname']");
-            List<string> items = new List<string>();
-            foreach (var n in node)
-            {
-                items.Add(n.InnerText);
-            }
             Form2 mDialog = new Form2(items);
-            mDialog.Owner=this;
+            mDialog.Owner = this;
             mDialog.ShowDialog();
             if (mDialog.DialogResult == DialogResult.OK)
             {
@@ -186,16 +106,6 @@ namespace Vmax44Parser
             this.parsedDataTableAdapter.Fill(this.vmax44parserDataSet.ParsedData);
             // TODO: This line of code loads data into the 'vmax44parserDataSet.Orders' table. You can move, or remove it, as needed.
             this.ordersTableAdapter.Fill(this.vmax44parserDataSet.Orders);
-        }
-
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
-        }
-
-        private void fKParsedDataOrdersBindingSource_CurrentChanged(object sender, EventArgs e)
-        {
-
         }
 
         private void button2_Click(object sender, EventArgs e)

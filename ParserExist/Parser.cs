@@ -29,20 +29,29 @@ namespace Vmax44Parser
         public string attribute;
     }
 
+    public delegate string SelectFromStringList(List<string> items);
+
     abstract public class Parser : IE
     {
         public List<PType> pagesType;
         public string strEndOfPage;
         public string ParserType;
+        public string manufacturer { get; set; }
+
+        public SelectFromStringList GetSelectedManufacturer;
 
         public Parser() : base()
-        { }
+        {
+            this.manufacturer = "";
+        }
 
         public abstract void Login(string filePasswords = "pass.xlsx");
 
         public abstract ParsedDataCollection ParsePage();
 
         public abstract void ClickManufacturer(string manufacturer);
+
+        public abstract ParsedDataCollection detailParse(string detailCode);
 
         public virtual bool isPageType(PTypeEnum type)
         {

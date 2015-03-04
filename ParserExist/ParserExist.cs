@@ -9,6 +9,8 @@ using System.Windows.Forms;
 using Excel = Microsoft.Office.Interop.Excel;
 using System.Text.RegularExpressions;
 using Vmax44ParserConnectedLayer;
+using HtmlAgilityPack;
+using System.Threading;
 
 namespace Vmax44Parser
 {
@@ -49,6 +51,87 @@ namespace Vmax44Parser
                 WaitUntilText("id=\"login\"");
                 
             }
+        }
+
+        public override ParsedDataCollection detailParse(string detailCode)
+        {
+            bool done = false;
+            ParsedDataCollection result = new ParsedDataCollection();
+            while (!done)
+            {
+                PTypeEnum pageType = this.getCurrentPageType();
+
+                switch (pageType)
+                {
+
+                    case PTypeEnum.selectManufacturerPage:
+                        if (manufacturer == "")
+                            manufacturer = SelectManufacturer();
+                        this.ClickManufacturer(manufacturer);
+                        this.WaitText("bl=\"-10\"");
+                        log("выбрали и кликнули по " + manufacturer);
+                        break;
+
+                    case PTypeEnum.noResultPage:
+                        //result = "no result;;"+detailCode+";;;";
+                        result.Add(new ParsedData()
+                        {
+                            orig = "no result",
+                            firmname = "",
+                            art = detailCode,
+                            desc = "",
+                            statistic = "",
+                            price = 0,
+                            url = "",
+                            parsertype = this.ParserType
+                        });
+                        this.GoToAndWaitFinish("http://exist.ru");
+                        Thread.Sleep(100);
+                        done = true;
+                        break;
+
+                    case PTypeEnum.dataPage:
+                        result = this.ParsePage();
+                        this.GoToNoWait("http://exist.ru");
+                        Thread.Sleep(100);
+                        this.WaitUntilText("Запрошенный артикул");
+                        done = true;
+                        break;
+
+                    case PTypeEnum.loginPage:
+                        this.Login();
+                        break;
+
+                    case PTypeEnum.startPage:
+                    case PTypeEnum.searchPage:
+                        this.TextField(Find.ByName("pcode")).SetAttributeValue("value", detailCode);
+                        this.ClickAndWaitFinish(Find.ByValue("Найти"));
+                        this.WaitText(detailCode);
+                        break;
+                }
+            }
+            foreach (var p in result)
+            {
+                p.searchedArtikul = detailCode;
+            }
+            return result;
+        }
+
+        private string SelectManufacturer()
+        {
+            string res = "";
+
+            HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
+            doc.LoadHtml(this.Body.OuterHtml);
+            HtmlNodeCollection node = doc.DocumentNode.SelectNodes("//div[@class='firmname']");
+            List<string> items = new List<string>();
+            foreach (var n in node)
+            {
+                items.Add(n.InnerText);
+            }
+
+            res = GetSelectedManufacturer(items);
+            return res;
         }
 
         public override ParsedDataCollection ParsePage()
