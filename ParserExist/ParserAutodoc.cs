@@ -41,8 +41,10 @@ namespace Vmax44Parser
                 //bool tmpbool = tmp.Contains("id=\"login\"");
                 this.Element(Find.ByClass("logon")).ClickNoWait();
                 WaitText("id=\"username\"");
-                TextField(Find.ByName("UserName")).SetAttributeValue("value", passwords.Range["B2"].Value);
-                TextField(Find.ByName("Password")).SetAttributeValue("value", passwords.Range["B3"].Value);
+                var login = TextField(Find.ById("UserName"));
+                login.Value=passwords.Range["B2"].Value;
+                var password = TextField(Find.ById("Password"));
+                password.Value=passwords.Range["B3"].Value;
                 passwords.Quit();
 
                 ClickAndWaitFinish(Find.ById("submit_logon_page"));
