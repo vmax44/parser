@@ -91,10 +91,36 @@ namespace Vmax44Parser
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            gotest();
+            Application.Exit();
+
             // TODO: This line of code loads data into the 'vmax44parserDataSet.ParsedData' table. You can move, or remove it, as needed.
             this.parsedDataTableAdapter.Fill(this.vmax44parserDataSet.ParsedData);
             // TODO: This line of code loads data into the 'vmax44parserDataSet.Orders' table. You can move, or remove it, as needed.
             this.ordersTableAdapter.Fill(this.vmax44parserDataSet.Orders);
+        }
+
+        public void gotest()
+        {
+            using (var browser = new ParserAutodoc())
+            {
+                try
+                {
+                    browser.GetSelectedManufacturer = SelectFromStringList;
+                    var result=browser.detailParse("5000A046");
+                    MessageBox.Show("Напарсено позиций -" + result.Count + "\r\n" + result.ToString());
+                }
+                catch (NotImplementedException ex)
+                {
+                    MessageBox.Show("Функция не доделана -" + ex.Message);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.ToString());
+                }
+                
+            }
+            
         }
 
         private void button2_Click(object sender, EventArgs e)

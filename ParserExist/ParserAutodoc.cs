@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HtmlAgilityPack;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -11,7 +12,7 @@ using Excel = Microsoft.Office.Interop.Excel;
 
 namespace Vmax44Parser
 {
-    class ParserAutodoc : Parser
+    public class ParserAutodoc : Parser
     {
         public ParserAutodoc(string f="pass.xlsx") : base()
         {
@@ -35,20 +36,25 @@ namespace Vmax44Parser
         {
             if (isPageType(PTypeEnum.loginPage))
             {
-                Excel.Application passwords = new Excel.Application();
-                passwords.Workbooks.Open(Path.IsPathRooted(filePasswords) ? filePasswords : Path.Combine(Application.StartupPath, filePasswords));
-                string tmp = this.Html;
-                //bool tmpbool = tmp.Contains("id=\"login\"");
-                this.Element(Find.ByClass("logon")).ClickNoWait();
-                WaitText("id=\"username\"");
-                var login = TextField(Find.ById("UserName"));
-                login.Value=passwords.Range["B2"].Value;
-                var password = TextField(Find.ById("Password"));
-                password.Value=passwords.Range["B3"].Value;
-                passwords.Quit();
+                throw new Exception("Сайт autodoc.ru требует авторизации!");
+                //Excel.Application passwords = new Excel.Application();
+                //passwords.Workbooks.Open(Path.IsPathRooted(filePasswords) ? filePasswords : Path.Combine(Application.StartupPath, filePasswords));
+                //string tmp = this.Html;
+                ////bool tmpbool = tmp.Contains("id=\"login\"");
+                //this.Element(Find.ByClass("logon")).ClickNoWait();
+                
+                ////WaitText("id=\"username\"");
+                //var login = this.TextField(Find.ById("UserName"));
+                ////login.Click();
+                
+                //login.TypeText(passwords.Range["B2"].Value);
+                //TextField password = this.TextField(Find.ById("Password"));
+                ////password.Click();
+                //password.TypeText(passwords.Range["B3"].Value);
+                //passwords.Quit();
 
-                ClickAndWaitFinish(Find.ById("submit_logon_page"));
-                WaitUntilText(">Войти</a>");
+                //ClickAndWaitFinish(Find.ById("submit_logon_page"));
+                //WaitUntilText(">Войти</a>");
 
             }
 
@@ -58,9 +64,15 @@ namespace Vmax44Parser
         {
             bool done = false;
             ParsedDataCollection result = new ParsedDataCollection();
+            PTypeEnum previousPageType = PTypeEnum.unknownPage;
             while (!done)
             {
                 PTypeEnum pageType = this.getCurrentPageType();
+                if(pageType==previousPageType)
+                {
+                    throw new Exception("Зацикливание - страница" + pageType.ToString());
+                }
+                previousPageType = pageType;
 
                 switch (pageType)
                 {
@@ -105,9 +117,9 @@ namespace Vmax44Parser
 
                     case PTypeEnum.startPage:
                     case PTypeEnum.searchPage:
-                        this.TextField(Find.ByName("pcode")).SetAttributeValue("value", detailCode);
-                        this.ClickAndWaitFinish(Find.ByValue("Найти"));
-                        this.WaitText(detailCode);
+                        this.TextField(Find.ById("Article")).SetAttributeValue("value", detailCode);
+                        this.ClickAndWaitFinish(Find.ById("search_btn"));
+                        this.WaitText(detailCode.ToUpper());
                         break;
                 }
             }
@@ -120,7 +132,19 @@ namespace Vmax44Parser
 
         private string SelectManufacturer()
         {
-            throw new NotImplementedException();
+            string res = "";
+
+            HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
+            doc.LoadHtml(this.Body.OuterHtml);
+            HtmlNodeCollection node = doc.DocumentNode.SelectNodes("//a[@class='l_m_A']");
+            List<string> items = new List<string>();
+            foreach (var n in node)
+            {
+                items.Add(n.InnerText);
+            }
+
+            res = GetSelectedManufacturer(items);
+            return res;
         }
         
 
@@ -131,7 +155,8 @@ namespace Vmax44Parser
 
         private void ClickManufacturer(string manufacturer)
         {
-            throw new NotImplementedException();
+            this.Element(Find.ByText(manufacturer).And(Find.ByClass("l_m_A"))).ClickNoWait();
+            this.WaitFinish();
         }
     }
 }
