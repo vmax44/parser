@@ -70,7 +70,7 @@ namespace Vmax44Parser
                 PTypeEnum pageType = this.getCurrentPageType();
                 if(pageType==previousPageType)
                 {
-                    throw new Exception("Зацикливание - страница" + pageType.ToString());
+                    throw new Exception("Зацикливание - страница " + pageType.ToString());
                 }
                 previousPageType = pageType;
 
@@ -81,8 +81,12 @@ namespace Vmax44Parser
                         if (manufacturer == "")
                             manufacturer = SelectManufacturer();
                         this.ClickManufacturer(manufacturer);
-                        this.WaitText("bl=\"-10\"");
+                        var timestart = System.DateTime.Now;
+                        this.Element(Find.ById("gridDetails")).WaitUntilExists();
+                        var timefinish = System.DateTime.Now;
+
                         log("выбрали и кликнули по " + manufacturer);
+                        log("От клика до перехода на страницу с деталями прошло " + (timefinish - timestart).ToString());
                         break;
 
                     case PTypeEnum.noResultPage:
@@ -104,6 +108,7 @@ namespace Vmax44Parser
                         break;
 
                     case PTypeEnum.dataPage:
+                        this.Element(Find.ById("gridDetails")).WaitUntilExists();
                         result = this.ParsePage();
                         this.GoToNoWait("http://www.autodoc.ru");
                         Thread.Sleep(100);
@@ -134,8 +139,10 @@ namespace Vmax44Parser
         {
             string res = "";
 
+            this.Element(Find.ById("gridMans")).WaitUntilExists(10);
             HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
-            doc.LoadHtml(this.Body.OuterHtml);
+            string h = this.Body.OuterHtml;
+            doc.LoadHtml(h);
             HtmlNodeCollection node = doc.DocumentNode.SelectNodes("//a[@class='l_m_A']");
             List<string> items = new List<string>();
             foreach (var n in node)
@@ -150,13 +157,72 @@ namespace Vmax44Parser
 
         private ParsedDataCollection ParsePage()
         {
-            throw new NotImplementedException();
+            HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
+            var h = this.GetHTML();
+            doc.LoadHtml(h);
+            ParsedDataCollection dataColl = new ParsedDataCollection();
+            string orig = "", firmname = "", art = "", desc = "", statistic = "", price_s = "";
+            decimal price;
+
+            var table_ = doc.DocumentNode.SelectSingleNode("//table[@id=\"gridDetails\"]");
+            var table__ = table_.SelectNodes(".//tr[not(@class=\"gridHeaderStyle3\")]");
+            var table=table__.ToArray();
+            foreach (var item in table)
+            {
+                orig = "original";
+
+                
+                string moredata = string.Empty;
+                PutParsedData(item, ".//td[4]/a[1]", ref moredata);
+                statistic = moredata.Trim();
+
+                var tmp = item.SelectSingleNode(".//td[4]/a[1]").GetAttributeValue("href","");
+                tmp=tmp.Substring(tmp.IndexOf("(")+1,tmp.IndexOf(")")-tmp.IndexOf("(")-1);
+                var tmparr = tmp.Split((",").ToCharArray());
+                firmname = tmparr[0].Replace("'", "");
+                art = tmparr[2].Replace("'", "");
+                desc = tmparr[3].Replace("'", "");
+
+                PutParsedData(item, ".//td[1]", ref price_s);
+                price = summParse(price_s);
+
+                ParsedData original = new ParsedData();
+                original.orig = orig;
+                original.firmname = firmname;
+                original.art = art;
+                original.desc = desc;
+                original.statistic = statistic;
+                original.price = price;
+                original.parsertype = this.ParserType;
+                original.url = this.Url;
+
+                dataColl.Add(original);
+            }
+            return dataColl;
+        }
+
+        private void PutParsedData(HtmlAgilityPack.HtmlNode item, string XPath, ref string to)
+        {
+            string tmp = GetNodeText(item, XPath);
+            tmp = HtmlAgilityPack.HtmlEntity.DeEntitize(tmp);
+            if (tmp != "")
+                to = tmp;
+        }
+
+        private string GetNodeText(HtmlAgilityPack.HtmlNode item, string XPath)
+        {
+            var tmp = item.SelectSingleNode(XPath);
+            if (tmp != null)
+                return tmp.InnerText;
+            else
+                return "";
         }
 
         private void ClickManufacturer(string manufacturer)
         {
             this.Element(Find.ByText(manufacturer).And(Find.ByClass("l_m_A"))).ClickNoWait();
             this.WaitFinish();
+            
         }
     }
 }

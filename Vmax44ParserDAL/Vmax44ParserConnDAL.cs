@@ -71,7 +71,7 @@ namespace Vmax44ParserConnectedLayer
         }
     }
 
-    public class OrdersDAL
+    public class OrdersDAL : IDisposable
     {
         private SqlConnection sqlCn = null;
 
@@ -268,6 +268,11 @@ namespace Vmax44ParserConnectedLayer
                 dr.Close();
             }
             return order;
+        }
+
+        public void Dispose()
+        {
+            if (this.sqlCn != null) this.CloseConnection();
         }
     }
 }
