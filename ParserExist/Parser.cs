@@ -13,7 +13,7 @@ namespace Vmax44Parser
     public enum PTypeEnum
     {
         loginPage, basketPage, searchPage, startPage,
-        selectManufacturerPage, dataPage, noResultPage,
+        selectManufacturerPage, dataPage, noResultPage,noResultPage1,
         unknownPage
     }
 
@@ -21,6 +21,18 @@ namespace Vmax44Parser
     {
         public PTypeEnum pageType;
         public string attribute;
+        public string DomContainsElement;
+        public string DomContainsElementText;
+        public string DomNotContainsElement;
+
+        public PType()
+        {
+            this.pageType = PTypeEnum.unknownPage;
+            this.attribute = string.Empty;
+            this.DomContainsElement = "";
+            this.DomContainsElementText = "";
+            this.DomNotContainsElement = "";
+        }
     }
 
     public delegate string SelectFromStringList(List<string> items);
@@ -49,17 +61,23 @@ namespace Vmax44Parser
 
         public virtual bool isPageType(PTypeEnum type)
         {
-            string t = "";
+            string attribute = "";
+            string DomContains = "";
+            string DomNotContains = "";
+            string DomContainsText = "";
 
             foreach (PType p in pagesType)
             {
                 if (p.pageType == type)
                 {
-                    t = p.attribute;
+                    attribute = p.attribute;
+                    DomContains = p.DomContainsElement;
+                    DomContainsText = p.DomContainsElementText;
+                    DomNotContains = p.DomNotContainsElement;
                     break;
                 }
             }
-            if ((t != "") && (this.GetHTML().Contains(t)))
+            if ((attribute != "") && (this.GetHTML().Contains(attribute)))
                 return true;
             else
                 return false;
@@ -92,11 +110,49 @@ namespace Vmax44Parser
         public virtual PTypeEnum getCurrentPageType()
         {
             PTypeEnum page = PTypeEnum.unknownPage;
+            bool result_attribute = false;
+            bool result_DomContainsElement = false;
+            bool result_DomNotContainsElement = false;
+            bool result_DomContainsElementText = false;
+
+            HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
+
             string pageHtml = this.GetHTML();
+
+            doc.LoadHtml(pageHtml);
 
             foreach (PType p in pagesType)
             {
-                if (pageHtml.Contains(p.attribute))
+                //attribute
+                if (p.attribute == "" || pageHtml.Contains(p.attribute))
+                {
+                    result_attribute = true;
+                }
+
+                if(p.DomContainsElement=="" || doc.DocumentNode.SelectNodes(p.DomContainsElement).Count>0)
+                {
+                    result_DomContainsElement = true;
+                }
+
+                if(p.DomContainsElementText=="" || p.DomContainsElement=="")
+                {
+                    result_DomContainsElementText = true;
+                }
+                else
+                {
+                    var elem = doc.DocumentNode.SelectSingleNode(p.DomContainsElement);
+                    if(elem!=null && elem.InnerText.Contains(p.DomContainsElementText))
+                    {
+                        result_DomContainsElementText = true;
+                    }
+                }
+
+                if(p.DomNotContainsElement=="" || doc.DocumentNode.SelectNodes(p.DomNotContainsElement)==null)
+                {
+                    result_DomNotContainsElement = true;
+                }
+
+                if(result_attribute && result_DomContainsElement && result_DomContainsElementText && result_DomNotContainsElement)
                 {
                     page = p.pageType;
                     break;

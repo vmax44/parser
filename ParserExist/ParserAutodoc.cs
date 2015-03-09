@@ -20,11 +20,12 @@ namespace Vmax44Parser
 
             pagesType = new List<PType>
             {   
-                new PType(){pageType=PTypeEnum.loginPage, attribute=">Войти</a>"},
+                new PType(){pageType=PTypeEnum.loginPage, attribute="Войти"},
                 new PType(){pageType=PTypeEnum.noResultPage, attribute="Нет предложений по этому номеру"},
+                new PType(){pageType=PTypeEnum.noResultPage1,attribute="По запрошенному Вами номеру нет предложений"},
                 new PType(){pageType=PTypeEnum.dataPage, attribute="Официальные замены выделены синим цветом"},
                 new PType(){pageType=PTypeEnum.selectManufacturerPage,attribute="Выберите возможного производителя для номера"},
-                new PType(){pageType=PTypeEnum.startPage, attribute="href=\"/Account/LogOut?returnUrl=%2F\">Выход</a>"},
+                new PType(){pageType=PTypeEnum.startPage, attribute="Выход"},
                 new PType(){pageType=PTypeEnum.searchPage, attribute="name=\"Article\" type=\"text\" value=\"Артикул детали\"/>"}
             };
 
@@ -90,6 +91,7 @@ namespace Vmax44Parser
                         break;
 
                     case PTypeEnum.noResultPage:
+                    case PTypeEnum.noResultPage1:
                         //result = "no result;;"+detailCode+";;;";
                         result.Add(new ParsedData()
                         {
@@ -139,11 +141,11 @@ namespace Vmax44Parser
         {
             string res = "";
 
-            this.Element(Find.ById("gridMans")).WaitUntilExists(10);
+            this.Element(Find.ById("gridMans")).WaitUntilExists();
             HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
-            string h = this.Body.OuterHtml;
+            string h = this.Element(Find.ById("gridMans")).OuterHtml;
             doc.LoadHtml(h);
-            HtmlNodeCollection node = doc.DocumentNode.SelectNodes("//a[@class='l_m_A']");
+            HtmlNodeCollection node = doc.DocumentNode.SelectNodes("//a");
             List<string> items = new List<string>();
             foreach (var n in node)
             {
@@ -164,8 +166,8 @@ namespace Vmax44Parser
             string orig = "", firmname = "", art = "", desc = "", statistic = "", price_s = "";
             decimal price;
 
-            var table_ = doc.DocumentNode.SelectSingleNode("//table[@id=\"gridDetails\"]");
-            var table__ = table_.SelectNodes(".//tr[not(@class=\"gridHeaderStyle3\")]");
+            var table_ = doc.DocumentNode.SelectSingleNode("//table[@id='gridDetails']");
+            var table__ = table_.SelectNodes(".//tr[not(@class='gridHeaderStyle3')]");
             var table=table__.ToArray();
             foreach (var item in table)
             {

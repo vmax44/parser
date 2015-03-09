@@ -102,7 +102,7 @@ namespace Vmax44Parser
 
         public void gotest()
         {
-            using (var browser = new ParserAutodoc())
+            using (var browser = new ParserExist())
             {
                 try
                 {
