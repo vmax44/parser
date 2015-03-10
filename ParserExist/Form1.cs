@@ -102,12 +102,12 @@ namespace Vmax44Parser
 
         public void gotest()
         {
-            using (var browser = new ParserExist())
+            using (var browser = new ParserAutodoc())
             {
                 try
                 {
                     browser.GetSelectedManufacturer = SelectFromStringList;
-                    var result=browser.detailParse("5000A046");
+                    var result=browser.detailParse("Z2156507");
                     MessageBox.Show("Напарсено позиций -" + result.Count + "\r\n" + result.ToString());
                 }
                 catch (NotImplementedException ex)

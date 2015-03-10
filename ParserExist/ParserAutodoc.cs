@@ -22,7 +22,8 @@ namespace Vmax44Parser
             {   
                 new PType(){pageType=PTypeEnum.loginPage, attribute="Войти"},
                 new PType(){pageType=PTypeEnum.noResultPage, attribute="Нет предложений по этому номеру"},
-                new PType(){pageType=PTypeEnum.noResultPage1,attribute="По запрошенному Вами номеру нет предложений"},
+                new PType(){pageType=PTypeEnum.noResultPage1,DomContainsElement="//span[@id='span_zamen']",
+                                      DomContainsElementText="По запрошенному Вами номеру нет предложений"},
                 new PType(){pageType=PTypeEnum.dataPage, attribute="Официальные замены выделены синим цветом"},
                 new PType(){pageType=PTypeEnum.selectManufacturerPage,attribute="Выберите возможного производителя для номера"},
                 new PType(){pageType=PTypeEnum.startPage, attribute="Выход"},

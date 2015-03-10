@@ -124,17 +124,17 @@ namespace Vmax44Parser
             foreach (PType p in pagesType)
             {
                 //attribute
-                if (p.attribute == "" || pageHtml.Contains(p.attribute))
-                {
+                if (p.attribute == "" || pageHtml.Contains(p.attribute)) // если атрибут не задан, или на странице содержится заданный атрибутом
+                {                                                        // текст, считаем, что страница подходит
                     result_attribute = true;
                 }
 
-                if(p.DomContainsElement=="" || doc.DocumentNode.SelectNodes(p.DomContainsElement).Count>0)
+                if(p.DomContainsElement=="" || doc.DocumentNode.SelectNodes(p.DomContainsElement)!=null)
                 {
                     result_DomContainsElement = true;
                 }
 
-                if(p.DomContainsElementText=="" || p.DomContainsElement=="")
+                if(p.DomContainsElementText=="" && p.DomContainsElement=="")
                 {
                     result_DomContainsElementText = true;
                 }
