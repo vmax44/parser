@@ -95,7 +95,7 @@ namespace Vmax44Parser
                     log("Trying to get HTML ...");
                     result = this.Html;
                     if (result == null)
-                        throw new NullReferenceException();
+                        wasException = true;
                 }
                 catch (Exception e)
                 {
@@ -110,10 +110,10 @@ namespace Vmax44Parser
         public virtual PTypeEnum getCurrentPageType()
         {
             PTypeEnum page = PTypeEnum.unknownPage;
-            bool result_attribute = false;
-            bool result_DomContainsElement = false;
-            bool result_DomNotContainsElement = false;
-            bool result_DomContainsElementText = false;
+            bool result_attribute;
+            bool result_DomContainsElement;
+            bool result_DomNotContainsElement;
+            bool result_DomContainsElementText;
 
             HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
 
@@ -123,6 +123,11 @@ namespace Vmax44Parser
 
             foreach (PType p in pagesType)
             {
+                result_attribute = false;
+                result_DomContainsElement = false;
+                result_DomNotContainsElement = false;
+                result_DomContainsElementText = false;
+
                 //attribute
                 if (p.attribute == "" || pageHtml.Contains(p.attribute)) // если атрибут не задан, или на странице содержится заданный атрибутом
                 {                                                        // текст, считаем, что страница подходит

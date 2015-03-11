@@ -94,6 +94,7 @@ namespace Vmax44Parser
                     case PTypeEnum.noResultPage:
                     case PTypeEnum.noResultPage1:
                         //result = "no result;;"+detailCode+";;;";
+                        var h = this.GetHTML();
                         result.Add(new ParsedData()
                         {
                             orig = "no result",
@@ -111,6 +112,7 @@ namespace Vmax44Parser
                         break;
 
                     case PTypeEnum.dataPage:
+                        var h1 = this.GetHTML();
                         this.Element(Find.ById("gridDetails")).WaitUntilExists();
                         result = this.ParsePage();
                         this.GoToNoWait("http://www.autodoc.ru");
@@ -226,6 +228,51 @@ namespace Vmax44Parser
             this.Element(Find.ByText(manufacturer).And(Find.ByClass("l_m_A"))).ClickNoWait();
             this.WaitFinish();
             
+        }
+
+        /// <summary>
+        /// Ожидание окончания загрузки страницы
+        /// </summary>
+        private HtmlAgilityPack.HtmlDocument WaitUntilPageLoaded(int timeout=15000, int step=100)
+        {
+            HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
+            int i = 0;
+            string h=string.Empty;
+            //Thread.Sleep(step);
+            while (i < timeout) //
+            {
+                h = this.GetHTML();
+                doc.LoadHtml(h);
+
+                //<div class="blue_txt">Официальные замены выделены синим цветом.</div>
+                var item = doc.DocumentNode.SelectSingleNode("//div[@class='blue_txt'");
+                if (item != null && (item.InnerText == "Официальные замены выделены синим цветом."))
+                {
+                    break;
+                }
+                    
+
+
+                log("Загрузка страницы - ждем " + step + " мс...");
+                Thread.Sleep(step);
+                i += step;
+            }
+            if (i < timeout)
+                log("Страница загрузилась");
+            else
+            {
+                log("Загрузка страницы - таймаут");
+                throw new TimeoutException();
+            }
+
+            //<p style="color:Red; font-weight:normal; font-size:9pt; font-family:Verdana,Tahoma">Нет предложений по этому номеру</p>
+
+            //<h1 class="ContentHeader">Выберите возможного производителя для номера 5000A046</h1>
+            //или <table id="gridMans" style="max-width:510px" class="grid">
+
+            //<h2 style="padding:16px 0 12px">Электронный каталог оригинальных запчастей для легковых автомобилей</h2>
+            return doc;
+
         }
     }
 }
