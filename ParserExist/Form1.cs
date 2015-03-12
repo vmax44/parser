@@ -91,8 +91,8 @@ namespace Vmax44Parser
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            gotest();
-            Application.Exit();
+            //gotest();
+            //Application.Exit();
 
             // TODO: This line of code loads data into the 'vmax44parserDataSet.ParsedData' table. You can move, or remove it, as needed.
             this.parsedDataTableAdapter.Fill(this.vmax44parserDataSet.ParsedData);
@@ -107,7 +107,7 @@ namespace Vmax44Parser
                 try
                 {
                     browser.GetSelectedManufacturer = SelectFromStringList;
-                    var result=browser.detailParse("Z2156507");
+                    var result=browser.detailParse("5000A046");
                     MessageBox.Show("Напарсено позиций -" + result.Count + "\r\n" + result.ToString());
                 }
                 catch (NotImplementedException ex)
