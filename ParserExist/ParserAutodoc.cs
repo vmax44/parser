@@ -14,9 +14,17 @@ namespace Vmax44Parser
 {
     public class ParserAutodoc : Parser
     {
-        public ParserAutodoc(string f="pass.xlsx") : base()
+        PTypeEnum previousPageType;
+        string PageHtml { get; set; }
+        HtmlAgilityPack.HtmlDocument PageHtmlDocument { get; set; }
+
+        public ParserAutodoc(string f = "pass.xlsx")
+            : base()
         {
             this.ParserType = "Autodoc.ru";
+            this.previousPageType = PTypeEnum.unknownPage;
+            PageHtmlDocument = new HtmlAgilityPack.HtmlDocument();
+            PageHtml = string.Empty;
 
             pagesType = new List<PType>
             {   
@@ -44,11 +52,11 @@ namespace Vmax44Parser
                 //string tmp = this.Html;
                 ////bool tmpbool = tmp.Contains("id=\"login\"");
                 //this.Element(Find.ByClass("logon")).ClickNoWait();
-                
+
                 ////WaitText("id=\"username\"");
                 //var login = this.TextField(Find.ById("UserName"));
                 ////login.Click();
-                
+
                 //login.TypeText(passwords.Range["B2"].Value);
                 //TextField password = this.TextField(Find.ById("Password"));
                 ////password.Click();
@@ -61,31 +69,19 @@ namespace Vmax44Parser
             }
 
         }
-        
+
         public override ParsedDataCollection detailParse(string detailCode)
         {
             bool done = false;
+            PTypeEnum pageType;
             ParsedDataCollection result = new ParsedDataCollection();
-            PTypeEnum previousPageType = PTypeEnum.unknownPage;
-            int circle_count = 0;
+
             while (!done)
             {
-                PTypeEnum pageType=WaitUntilPageLoaded();
-                //PTypeEnum pageType = this.getCurrentPageType();
-                if(pageType==previousPageType)
-                {
-                    if(circle_count++>5)
-                        throw new Exception("Зацикливание - страница " + pageType.ToString());
-                }
-                else
-                {
-                    circle_count = 0;
-                }
-                previousPageType = pageType;
+                pageType = WaitUntilPageLoaded();
 
                 switch (pageType)
                 {
-
                     case PTypeEnum.selectManufacturerPage:
                         if (manufacturer == "")
                             manufacturer = SelectManufacturer();
@@ -100,7 +96,6 @@ namespace Vmax44Parser
 
                     case PTypeEnum.noResultPage:
                     case PTypeEnum.noResultPage1:
-                        //result = "no result;;"+detailCode+";;;";
                         var h = this.GetHTML();
                         result.Add(new ParsedData()
                         {
@@ -119,12 +114,8 @@ namespace Vmax44Parser
                         break;
 
                     case PTypeEnum.dataPage:
-                        var h1 = this.GetHTML();
-                        this.Element(Find.ById("gridDetails")).WaitUntilExists();
                         result = this.ParsePage();
                         this.GoToNoWait("http://www.autodoc.ru");
-                        Thread.Sleep(100);
-                        //this.WaitUntilText("Запрошенный артикул");
                         done = true;
                         break;
 
@@ -135,8 +126,11 @@ namespace Vmax44Parser
                     case PTypeEnum.startPage:
                     case PTypeEnum.searchPage:
                         this.TextField(Find.ById("Article")).SetAttributeValue("value", detailCode);
-                        this.ClickAndWaitFinish(Find.ById("search_btn"));
-                        //this.WaitText(detailCode.ToUpper());
+                        this.Element(Find.ById("search_btn")).ClickNoWait();
+                        break;
+
+                    case PTypeEnum.unknownPage:
+                        this.GoToNoWait("http://www.autodoc.ru");
                         break;
                 }
             }
@@ -165,31 +159,28 @@ namespace Vmax44Parser
             res = GetSelectedManufacturer(items);
             return res;
         }
-        
+
 
         private ParsedDataCollection ParsePage()
         {
-            HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
-            var h = this.GetHTML();
-            doc.LoadHtml(h);
             ParsedDataCollection dataColl = new ParsedDataCollection();
             string orig = "", firmname = "", art = "", desc = "", statistic = "", price_s = "";
             decimal price;
 
-            var table_ = doc.DocumentNode.SelectSingleNode("//table[@id='gridDetails']");
+            var table_ = PageHtmlDocument.DocumentNode.SelectSingleNode("//table[@id='gridDetails']");
             var table__ = table_.SelectNodes(".//tr[not(@class='gridHeaderStyle3')]");
-            var table=table__.ToArray();
+            var table = table__.ToArray();
             foreach (var item in table)
             {
                 orig = "original";
 
-                
+
                 string moredata = string.Empty;
                 PutParsedData(item, ".//td[4]/a[1]", ref moredata);
                 statistic = moredata.Trim();
 
-                var tmp = item.SelectSingleNode(".//td[4]/a[1]").GetAttributeValue("href","");
-                tmp=tmp.Substring(tmp.IndexOf("(")+1,tmp.IndexOf(")")-tmp.IndexOf("(")-1);
+                var tmp = item.SelectSingleNode(".//td[4]/a[1]").GetAttributeValue("href", "");
+                tmp = tmp.Substring(tmp.IndexOf("(") + 1, tmp.IndexOf(")") - tmp.IndexOf("(") - 1);
                 var tmparr = tmp.Split((",").ToCharArray());
                 firmname = tmparr[0].Replace("'", "");
                 art = tmparr[2].Replace("'", "");
@@ -233,30 +224,30 @@ namespace Vmax44Parser
         private void ClickManufacturer(string manufacturer)
         {
             this.Element(Find.ByTitle(manufacturer)).ClickNoWait();
-            this.WaitFinish();
-            
+            //this.WaitFinish();
+
         }
 
         /// <summary>
-        /// Ожидание окончания загрузки страницы
+        /// Ожидание окончания загрузки страницы, определение типа страницы, 
         /// </summary>
-        private PTypeEnum WaitUntilPageLoaded(int timeout=15000, int step=100)
+        private PTypeEnum WaitUntilPageLoaded(int timeout = 15000, int step = 100)
         {
-            HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
+            //HtmlAgilityPack.HtmlDocument PageHtmlDocument = new HtmlAgilityPack.HtmlDocument();
             int i = 0;
             PTypeEnum pageType = PTypeEnum.unknownPage;
-            string h=string.Empty;
-            Thread.Sleep(step*5);
-            while (i < timeout) //
+            //string PageHtml = string.Empty;
+            //Thread.Sleep(step*5);
+            do //
             {
-                h = this.GetHTML();
-                doc.LoadHtml(h);
+                this.PageHtml = this.GetHTML();
+                this.PageHtmlDocument.LoadHtml(PageHtml);
 
                 //<div class="blue_txt">Официальные замены выделены синим цветом.</div>
-                var item = doc.DocumentNode.SelectSingleNode("//div[@class='blue_txt']");
+                var item = PageHtmlDocument.DocumentNode.SelectSingleNode("//div[@class='blue_txt']");
                 if (item != null && (item.InnerText == "Официальные замены выделены синим цветом."))
                 {
-                    item = doc.DocumentNode.SelectSingleNode("//table[@id='gridDetails']");
+                    item = PageHtmlDocument.DocumentNode.SelectSingleNode("//table[@id='gridDetails']");
                     if (item != null)
                     {
                         pageType = PTypeEnum.dataPage;
@@ -265,54 +256,61 @@ namespace Vmax44Parser
                     {
                         pageType = PTypeEnum.noResultPage;
                     }
-                    break;
+                    //break;
                 }
-                    
-                //<p style="color:Red; font-weight:normal; font-size:9pt; font-family:Verdana,Tahoma">Нет предложений по этому номеру</p>
-                if(h.Contains("Нет предложений по этому номеру"))
-                {
-                    pageType = PTypeEnum.noResultPage;
-                    break;
-                }
+                else
 
-                //<h1 class="ContentHeader">Выберите возможного производителя для номера 5000A046</h1>
-                if (h.Contains("Выберите возможного производителя для номера"))
-                {
-                    pageType = PTypeEnum.selectManufacturerPage;
-                    break;
-                }
-                
-                //или <table id="gridMans" style="max-width:510px" class="grid">
-                item = doc.DocumentNode.SelectSingleNode("//table[@id='gridMans']");
-                if (item != null)
-                {
-                    pageType = PTypeEnum.selectManufacturerPage;
-                    break;
-                }
+                    //<p style="color:Red; font-weight:normal; font-size:9pt; font-family:Verdana,Tahoma">Нет предложений по этому номеру</p>
+                    if (PageHtml.Contains("Нет предложений по этому номеру"))
+                    {
+                        pageType = PTypeEnum.noResultPage;
+                        //break;
+                    }
+                    else
 
-                //<h2 style="padding:16px 0 12px">Электронный каталог оригинальных запчастей для легковых автомобилей</h2>
-                if (h.Contains("Электронный каталог оригинальных запчастей для легковых автомобилей"))
+                        //<h1 class="ContentHeader">Выберите возможного производителя для номера 5000A046</h1>
+                        if (PageHtml.Contains("Выберите возможного производителя для номера"))
+                        {
+                            pageType = PTypeEnum.selectManufacturerPage;
+                            //break;
+                        }
+                        else
+                        {
+                            //или <table id="gridMans" style="max-width:510px" class="grid">
+                            item = PageHtmlDocument.DocumentNode.SelectSingleNode("//table[@id='gridMans']");
+                            if (item != null)
+                            {
+                                pageType = PTypeEnum.selectManufacturerPage;
+                                //break;
+                            }
+
+                            else
+
+                                //<h2 style="padding:16px 0 12px">Электронный каталог оригинальных запчастей для легковых автомобилей</h2>
+                                if (PageHtml.Contains("Электронный каталог оригинальных запчастей для легковых автомобилей"))
+                                {
+                                    pageType = PTypeEnum.startPage;
+                                    //break;
+                                }
+                        }
+
+                if (pageType==previousPageType)
                 {
-                    pageType = PTypeEnum.startPage;
-                    break;
+                    log("Загрузка страницы - ждем " + step + " мс...");
+                    Thread.Sleep(step);
+                    i += step; 
                 }
-                
-                log("Загрузка страницы - ждем " + step + " мс...");
-                Thread.Sleep(step);
-                i += step;
-            }
+            } while ((i < timeout) && (pageType == previousPageType));
             if (i < timeout)
                 log("Страница загрузилась");
             else
             {
-                log("Загрузка страницы - таймаут");
-                throw new TimeoutException("Таймаут во время загрузки страницы");
+                log("Загрузка страницы - таймаут. Считаем, что загрузилась неизвестная страница");
+                pageType = PTypeEnum.unknownPage;
+                //throw new TimeoutException("Таймаут во время загрузки страницы");
             }
-
-
-
+            this.previousPageType = pageType;
             return pageType;
-
         }
     }
 }
