@@ -46,7 +46,7 @@ namespace Vmax44Parser
         private void button1_Click(object sender, EventArgs e)
         {
             string detailCode = "";
-            using (var browser = new ParserAutodoc())
+            using (Parser browser = new ParserAutodoc())
             {
                 //browser.Visible = false;
                 browser.GetSelectedManufacturer = SelectFromStringList;
@@ -95,9 +95,9 @@ namespace Vmax44Parser
             //Application.Exit();
 
             // TODO: This line of code loads data into the 'vmax44parserDataSet.ParsedData' table. You can move, or remove it, as needed.
-            this.parsedDataTableAdapter.Fill(this.vmax44parserDataSet.ParsedData);
+            //this.parsedDataTableAdapter.Fill(this.vmax44parserDataSet.ParsedData);
             // TODO: This line of code loads data into the 'vmax44parserDataSet.Orders' table. You can move, or remove it, as needed.
-            this.ordersTableAdapter.Fill(this.vmax44parserDataSet.Orders);
+            //this.ordersTableAdapter.Fill(this.vmax44parserDataSet.Orders);
         }
 
         public void gotest()

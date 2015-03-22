@@ -10,7 +10,7 @@ using System.Threading;
 
 namespace Vmax44Parser
 {
-    public class ParserExist : Parser
+    public class ParserExist : ParserWatin
     {
         public ParserExist(string f = "pass.xlsx")
             : base()
@@ -37,10 +37,10 @@ namespace Vmax44Parser
             {
                 Excel.Application passwords = new Excel.Application();
                 passwords.Workbooks.Open(Path.IsPathRooted(filePasswords) ? filePasswords : Path.Combine(Application.StartupPath, filePasswords));
-                string tmp = this.Html;
+                string tmp = this.browser.Html;
                 bool tmpbool = tmp.Contains("id=\"login\"");
-                TextField(Find.ByName("login")).SetAttributeValue("value", passwords.Range["A2"].Value);
-                TextField(Find.ByName("pass")).SetAttributeValue("value", passwords.Range["A3"].Value);
+                this.browser.TextField(Find.ByName("login")).SetAttributeValue("value", passwords.Range["A2"].Value);
+                this.browser.TextField(Find.ByName("pass")).SetAttributeValue("value", passwords.Range["A3"].Value);
                 passwords.Quit();
 
                 ClickAndWaitFinish(Find.ById("btnLogin"));
@@ -88,7 +88,7 @@ namespace Vmax44Parser
 
                     case PTypeEnum.dataPage:
                         result = this.ParsePage();
-                        this.GoToNoWait("http://exist.ru");
+                        this.browser.GoToNoWait("http://exist.ru");
                         Thread.Sleep(100);
                         this.WaitUntilText("Запрошенный артикул");
                         done = true;
@@ -100,7 +100,7 @@ namespace Vmax44Parser
 
                     case PTypeEnum.startPage:
                     case PTypeEnum.searchPage:
-                        this.TextField(Find.ByName("pcode")).SetAttributeValue("value", detailCode);
+                        this.browser.TextField(Find.ByName("pcode")).SetAttributeValue("value", detailCode);
                         this.ClickAndWaitFinish(Find.ByValue("Найти"));
                         this.WaitText(detailCode);
                         break;
@@ -118,7 +118,7 @@ namespace Vmax44Parser
             string res = "";
 
             HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
-            doc.LoadHtml(this.Body.OuterHtml);
+            doc.LoadHtml(this.browser.Body.OuterHtml);
             HtmlNodeCollection node = doc.DocumentNode.SelectNodes("//div[@class='firmname']");
             List<string> items = new List<string>();
             foreach (var n in node)
@@ -163,7 +163,7 @@ namespace Vmax44Parser
                 original.statistic = statistic;
                 original.price = price;
                 original.parsertype = "Exist.ru";
-                original.url = this.Url;
+                original.url = this.browser.Url;
                 dataColl.Add(original);
             }
             return dataColl;
@@ -188,7 +188,7 @@ namespace Vmax44Parser
 
         private void ClickManufacturer(string manufacturer)
         {
-            this.Div(Find.ByText(manufacturer).And(Find.ByClass("firmname"))).ClickNoWait();
+            this.browser.Div(Find.ByText(manufacturer).And(Find.ByClass("firmname"))).ClickNoWait();
             this.WaitFinish();
         }
 
