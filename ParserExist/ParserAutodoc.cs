@@ -14,15 +14,10 @@ namespace Vmax44Parser
 {
     public class ParserAutodoc : ParserWatin
     {
-        
-
         public ParserAutodoc(string f = "pass.xlsx")
             : base()
         {
             this.ParserType = "Autodoc.ru";
-            this.previousPageType = PTypeEnum.unknownPage;
-            this.PageHtmlDocument = new HtmlAgilityPack.HtmlDocument();
-            this.PageHtml = string.Empty;
 
             pagesType = new List<PType>
             {   
@@ -155,7 +150,7 @@ namespace Vmax44Parser
         {
             string res = "";
 
-            this.browser.Element(Find.ById("gridMans")).WaitUntilExists();
+            //this.browser.Element(Find.ById("gridMans")).WaitUntilExists();
             HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
             string h = this.browser.Element(Find.ById("gridMans")).OuterHtml;
             doc.LoadHtml(h);

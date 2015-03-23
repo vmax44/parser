@@ -8,13 +8,9 @@ using System.Text.RegularExpressions;
 
 namespace Vmax44Parser
 {
-    public delegate string SelectFromStringList(List<string> items);
-
-    abstract public class ParserWatin : Parser, IDisposable
+    
+    abstract public class ParserWatin : Parser
     {
-        protected string PageHtml { get; set; }
-        protected HtmlAgilityPack.HtmlDocument PageHtmlDocument { get; set; }
-
         protected IE browser { get; set; }
 
         protected PTypeEnum previousPageType;
@@ -29,6 +25,7 @@ namespace Vmax44Parser
         {
             this.manufacturer = "";
             browser = new IE();
+            this.previousPageType = PTypeEnum.unknownPage;
         }
 
         public abstract void Login(string filePasswords = "pass.xlsx");
@@ -73,7 +70,7 @@ namespace Vmax44Parser
             return result;
         }
 
-        public virtual PTypeEnum getCurrentPageType()
+        protected override PTypeEnum getCurrentPageType()
         {
             PTypeEnum page = PTypeEnum.unknownPage;
 

@@ -55,7 +55,7 @@ namespace Vmax44Parser
             ParsedDataCollection result = new ParsedDataCollection();
             while (!done)
             {
-                PTypeEnum pageType = this.getCurrentPageType();
+                PTypeEnum pageType = this.WaitUntilPageLoaded();
 
                 switch (pageType)
                 {

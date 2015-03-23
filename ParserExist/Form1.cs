@@ -46,7 +46,7 @@ namespace Vmax44Parser
         private void button1_Click(object sender, EventArgs e)
         {
             string detailCode = "";
-            using (Parser browser = new ParserAutodoc())
+            using (Parser browser = new ParserExist())
             {
                 //browser.Visible = false;
                 browser.GetSelectedManufacturer = SelectFromStringList;
