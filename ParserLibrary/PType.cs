@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Vmax44Parser
+namespace Vmax44Parser.library
 {
     public enum PTypeEnum
     {

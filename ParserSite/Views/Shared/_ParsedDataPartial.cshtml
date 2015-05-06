@@ -1,0 +1,83 @@
+﻿@model IEnumerable<ParsedData>
+
+@{
+    var ParserTypes = Model.GroupBy(o => o.ParserType.Trim())
+        .Select(p => p.Key)
+        .ToList();
+}
+
+<table class="table-bordered">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Order.OrderNumber)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ParseDate)
+        </th>
+@foreach (var p in ParserTypes)
+{
+        <th>
+            @p
+        </th>
+}
+        <th>
+            @Html.DisplayNameFor(model => model.Original)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Firmname)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Part.PartNumber)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Statistic)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.Url)
+        </th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Order.OrderNumber)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ParseDate)
+        </td>
+@foreach (var p in ParserTypes)
+{
+        <td>
+            @if (item.ParserType.Trim() == p)
+            {
+                @Html.DisplayFor(modelItem=>item.Price)
+            }
+        </td>
+}
+        <td>
+            @Html.DisplayFor(modelItem => item.Original)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Firmname)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Part.PartNumber)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Description)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Statistic)
+        </td>
+
+        <td>
+            @Html.DisplayFor(modelItem => item.Url)
+        </td>
+    </tr>
+}
+
+</table>

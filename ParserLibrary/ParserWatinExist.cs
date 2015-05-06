@@ -2,17 +2,17 @@
 using System.Linq;
 using WatiN.Core;
 using System.IO;
-using System.Windows.Forms;
+//using System.Windows.Forms;
 using Excel = Microsoft.Office.Interop.Excel;
 using Vmax44ParserConnectedLayer;
 using HtmlAgilityPack;
 using System.Threading;
 
-namespace Vmax44Parser
+namespace Vmax44Parser.library
 {
-    public class ParserExist : ParserWatin
+    public class ParserWatinExist : ParserWatin
     {
-        public ParserExist(string f = "pass.xlsx")
+        public ParserWatinExist(string f = "pass.xlsx")
             : base()
         {
             this.ParserType = "Exist.ru";
@@ -31,12 +31,13 @@ namespace Vmax44Parser
             GoToAndWaitFinish("http://exist.ru");
         }
 
-        public override void Login(string filePasswords = "pass.xlsx")
+        public override void Login(string filePasswords = "C:\\Users\\maxim\\Documents\\Visual Studio 2010\\Projects\\ParserExist\\ParserExist\\bin\\Debug\\pass.xlsx")
         {
             if (isPageType(PTypeEnum.loginPage))
             {
                 Excel.Application passwords = new Excel.Application();
-                passwords.Workbooks.Open(Path.IsPathRooted(filePasswords) ? filePasswords : Path.Combine(Application.StartupPath, filePasswords));
+                //passwords.Workbooks.Open(Path.IsPathRooted(filePasswords) ? filePasswords : Path.Combine(Application.StartupPath, filePasswords));
+                passwords.Workbooks.Open(filePasswords);
                 string tmp = this.browser.Html;
                 bool tmpbool = tmp.Contains("id=\"login\"");
                 this.browser.TextField(Find.ByName("login")).SetAttributeValue("value", passwords.Range["A2"].Value);

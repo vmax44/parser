@@ -1,6 +1,8 @@
-﻿using Vmax44Parser;
+﻿//using Vmax44Parser;
+using Vmax44Parser.library;
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 
 namespace UnitTests
 {
@@ -10,7 +12,7 @@ namespace UnitTests
         [TestMethod]
         public void SummParseTest()
         {
-            Vmax44Parser.ParserExist parser=new ParserExist();
+            Parser parser=new ParserWatinExist();
             decimal expected=293839.49m;
             string s1 = "f293 839.49r.";
             //string s2 = "293,839.49r.";

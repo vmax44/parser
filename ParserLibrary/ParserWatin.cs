@@ -6,7 +6,7 @@ using System.Threading;
 using System.Text.RegularExpressions;
 
 
-namespace Vmax44Parser
+namespace Vmax44Parser.library
 {
     
     abstract public class ParserWatin : Parser

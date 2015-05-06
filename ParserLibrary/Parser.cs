@@ -4,10 +4,8 @@ using System.Linq;
 using System.Text;
 using Vmax44ParserConnectedLayer;
 
-namespace Vmax44Parser
+namespace Vmax44Parser.library
 {
-    public delegate string SelectFromStringList(List<string> items);
-
     abstract public class Parser: IDisposable
     {
         /// <summary>

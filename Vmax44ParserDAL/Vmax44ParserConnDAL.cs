@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Text;
 using System.Data;
 using System.Data.SqlClient;
+using System.ComponentModel.DataAnnotations;
 
 namespace Vmax44ParserConnectedLayer
 {
     public class Order
-    {
+    {   
+        [Key]
         public int Id {get;set;}
         public string ClientName {get;set;}
         public string ClientCar {get;set;}
@@ -17,6 +19,7 @@ namespace Vmax44ParserConnectedLayer
 
     public class ParsedData
     {
+        [Key]
         public int parseddataid { get; set; }
         public int orderid { get; set; }
         public string orig { get; set; }

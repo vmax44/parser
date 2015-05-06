@@ -1,0 +1,113 @@
+﻿@model ParserSite.ParsedData
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>ParsedData</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Order.OrderNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Order.OrderNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ParseDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ParseDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ParserType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ParserType)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Original)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Original)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Firmname)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Firmname)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Artikul)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Artikul)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Statistic)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Statistic)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SearchedArtikul)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SearchedArtikul)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Url)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Url)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

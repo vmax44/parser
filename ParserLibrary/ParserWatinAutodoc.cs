@@ -5,16 +5,16 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using System.Windows.Forms;
+//using System.Windows.Forms;
 using Vmax44ParserConnectedLayer;
 using WatiN.Core;
 using Excel = Microsoft.Office.Interop.Excel;
 
-namespace Vmax44Parser
+namespace Vmax44Parser.library
 {
-    public class ParserAutodoc : ParserWatin
+    public class ParserWatinAutodoc : ParserWatin
     {
-        public ParserAutodoc(string f = "pass.xlsx")
+        public ParserWatinAutodoc(string f = "pass.xlsx")
             : base()
         {
             this.ParserType = "Autodoc.ru";

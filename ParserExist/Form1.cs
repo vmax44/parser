@@ -10,6 +10,7 @@ using System.Configuration;
 using Excel = Microsoft.Office.Interop.Excel;
 using WinForm = System.Windows.Forms.Form;
 
+using Vmax44Parser.library;
 
 
 namespace Vmax44Parser
@@ -46,7 +47,7 @@ namespace Vmax44Parser
         private void button1_Click(object sender, EventArgs e)
         {
             string detailCode = "";
-            using (Parser browser = new ParserExist())
+            using (Parser browser = new ParserWatinAutodoc())
             {
                 //browser.Visible = false;
                 browser.GetSelectedManufacturer = SelectFromStringList;
@@ -102,7 +103,7 @@ namespace Vmax44Parser
 
         public void gotest()
         {
-            using (var browser = new ParserAutodoc())
+            using (var browser = new ParserWatinAutodoc())
             {
                 try
                 {
