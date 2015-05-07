@@ -7,10 +7,11 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using ParserSite;
+using System.Threading;
 
 namespace ParserSite.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class OrdersController : Controller
     {
         private ParserContext db = new ParserContext();
@@ -18,13 +19,23 @@ namespace ParserSite.Controllers
         // GET: Orders
         public ActionResult Index()
         {
-            var o = db.Orders.Include(c => c.ParsedDatas);
-            return View(o.ToList());
+            //var o = db.Orders.Include(c => c.ParsedDatas);
+            if (Request.IsAjaxRequest())
+            {
+                var o = db.Orders;
+                Thread.Sleep(5000);
+                return PartialView("IndexAjax", o.ToList());
+            }
+            else
+            {
+                return View();
+            }
         }
 
         public ActionResult IndexAjax()
         {
             var o = db.Orders;
+            Thread.Sleep(5000);
             return PartialView(o.ToList());
         }
 

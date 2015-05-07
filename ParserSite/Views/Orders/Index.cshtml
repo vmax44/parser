@@ -10,11 +10,16 @@
 </p>
 
 <div id="list-orders">
+    <div id="loading">
+        Загрузка данных с сервера...
+    </div>
 </div>
+
 @section Scripts {
 <script type="text/javascript">
     $(document).ready(function () {
-        $("#list-orders").load("/Orders/IndexAjax");
+        $.ajaxSetup({ cache: false });
+        $("#list-orders").load("/Orders/Index");
     });
 </script>
 }
