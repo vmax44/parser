@@ -1,0 +1,32 @@
+﻿@model IEnumerable<Part>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.PartNumber)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PartName)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.PartNumber)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PartName)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.Id })
+            @if (item.ParsedDatas.Count == 0)
+            {
+               @Html.ActionLink("Delete", "Delete", new { id = item.Id });
+            }
+        </td>
+    </tr>
+}
+
+</table>

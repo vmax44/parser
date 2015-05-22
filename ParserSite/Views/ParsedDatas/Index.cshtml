@@ -13,9 +13,6 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Order.OrderNumber)
-        </th>
-        <th>
             @Html.DisplayNameFor(model => model.ParseDate)
         </th>
         <th>
@@ -26,9 +23,6 @@
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Firmname)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Artikul)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Description)
@@ -51,9 +45,6 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.Order.OrderNumber)
-        </td>
-        <td>
             @Html.DisplayFor(modelItem => item.ParseDate)
         </td>
         <td>
@@ -64,9 +55,6 @@
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Firmname)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Artikul)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Description)

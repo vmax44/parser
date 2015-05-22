@@ -7,124 +7,118 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using ParserSite;
-using System.Threading;
 
 namespace ParserSite.Controllers
 {
-    //[Authorize]
-    public class OrdersController : Controller
+    public class PartsController : Controller
     {
         private ParserContext db = new ParserContext();
 
-        // GET: Orders
-        public ActionResult Index()
+        // GET: Parts
+        public ActionResult Index(int id)
         {
-            //var o = db.Orders.Include(c => c.ParsedDatas);
-            if (Request.IsAjaxRequest())
+            Order o = db.Orders.Find(id);
+            if (o == null)
             {
-                var o = db.Orders;
-                //Thread.Sleep(5000);
-                return PartialView("IndexAjax", o.ToList());
+                return HttpNotFound();
             }
-            else
-            {
-                return View();
-            }
+            var p = o.Parts.ToList();
+            return View(p.ToList());
         }
 
-        // GET: Orders/Details/5
+        // GET: Parts/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Order order = db.Orders.Find(id);
-            if (order == null)
+            Part part = db.Parts.Find(id);
+            if (part == null)
             {
                 return HttpNotFound();
             }
-            return View(order);
+            return View(part);
         }
 
-        // GET: Orders/Create
+        // GET: Parts/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: Orders/Create
+        // POST: Parts/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,OrderNumber,ClientName,ClientCar,OrderDate,DTPDate")] Order order)
+        public ActionResult Create([Bind(Include = "Id,PartNumber,PartName")] Part part)
         {
             if (ModelState.IsValid)
             {
-                db.Orders.Add(order);
+                db.Parts.Add(part);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index","Orders",null);
             }
 
-            return View(order);
+            return View(part);
         }
 
-        // GET: Orders/Edit/5
+        // GET: Parts/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Order order = db.Orders.Find(id);
-            if (order == null)
+            Part part = db.Parts.Find(id);
+            if (part == null)
             {
                 return HttpNotFound();
             }
-            return View(order);
+            return View(part);
         }
 
-        // POST: Orders/Edit/5
+        // POST: Parts/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,OrderNumber,ClientName,ClientCar,OrderDate,DTPDate")] Order order)
+        public ActionResult Edit([Bind(Include = "Id,PartNumber,PartName")] Part part)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(order).State = EntityState.Modified;
+                db.Entry(part).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index","Orders",null);
             }
-            return View(order);
+            return View(part);
         }
 
-        // GET: Orders/Delete/5
+        // GET: Parts/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Order order = db.Orders.Find(id);
-            if (order == null)
+            Part part = db.Parts.Find(id);
+            if (part == null)
             {
                 return HttpNotFound();
             }
-            return View(order);
+            return View(part);
         }
 
-        // POST: Orders/Delete/5
+        // POST: Parts/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Order order = db.Orders.Find(id);
-            db.Orders.Remove(order);
+            Part part = db.Parts.Find(id);
+            db.Parts.Remove(part);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("Index","Orders",null);
         }
 
         protected override void Dispose(bool disposing)
