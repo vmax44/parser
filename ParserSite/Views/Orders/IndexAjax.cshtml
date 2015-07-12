@@ -44,11 +44,18 @@
             </td>
             <td></td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Edit", "Edit", "Orders", new { id = item.Id },
+                    new { @class = "viewDialog", data_dialog_title = "Редактирование заказа" }) |
                 @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                @Html.ActionLink("Delete", "Delete", "Orders", new { id = item.Id },
+                    new { @class = "viewDialog", data_dialog_title = "Удаление заказа" })
             </td>
         </tr>
     }
 
 </table>
+
+<p> @Html.ActionLink("Add New", "Create", "Orders", new { }, new { @class = "viewDialog", data_dialog_title = "Создание заказа" })</p>
+<script>
+    $(document).ready(dialogrun());
+</script>

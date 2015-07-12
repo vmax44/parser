@@ -2,6 +2,7 @@ namespace ParserSite
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
     using System.Data.Entity;
     using System.Linq;
 
@@ -9,6 +10,7 @@ namespace ParserSite
     {
         public int Id { get; set; }
         //public int OrderId { get; set; }
+        [Required]
         public string PartNumber { get; set; }
         public string PartName { get; set; }
         

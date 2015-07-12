@@ -7,58 +7,128 @@
 
 <h2>Details</h2>
 
+<script type="text/javascript">
+
+    /**
+      * Функция для отправки формы средствами Ajax
+    **/
+    function AjaxFormRequest_func(form_id, url, func_ok, func_error) {
+        jQuery.ajax({
+            url: url, //Адрес подгружаемой страницы
+
+            type: "POST", //Тип запроса
+            dataType: "html", //Тип данных
+            data: jQuery("#" + form_id).serialize(),
+            success: func_ok,
+            error: func_error
+        });
+    }
+    function AjaxFormRequest(result_id, form_id, url) {
+        AjaxFormRequest_func(
+            form_id,
+            url,
+            function (response) { //Если все нормально
+                document.getElementById(result_id).innerHTML = response;
+            },
+            function (response) { //Если ошибка
+                document.getElementById(result_id).innerHTML = "Ошибка при отправке формы";
+            }
+        )
+    }
+
+    function AjaxRequest_func(url, func_ok, func_error) {
+        jQuery.ajax({
+            url: url, //Адрес подгружаемой страницы
+            type: "GET", //Тип запроса
+            dataType: "html", //Тип данных
+            success: func_ok,
+            error: func_error
+        });
+    }
+    function AjaxRequest(result_id, url) {
+        AjaxRequest_func(
+            url,
+            function (response) { //Если все нормально
+                document.getElementById(result_id).innerHTML = response;
+            },
+            function (response) { //Если ошибка
+                document.getElementById(result_id).innerHTML = 'Ошибка при отправке формы';
+            }
+        )
+    }
+
+    //Скрипты для создания запчасти
+    index_parts_action = '@Url.Action("Index", "Parts", new { OrderId = Model.Id })';
+
+    part_created_ok = function (res) {
+        AjaxRequest('parts_list_container',index_parts_action);
+        document.getElementById('parts_create_container').innerHTML = res;
+    }
+    part_created_error = function (res) {
+        document.getElementById('parts_create_container').innerHTML = 'Ошибка при отправке формы';
+    }
+
+</script>
+
 <div class="row">
-<div class="col-md-6">
-    <h4>Order</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.OrderNumber)
-        </dt>
+    <div class="col-md-6">
+        <h4>Order</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.OrderNumber)
+            </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.OrderNumber)
-        </dd>
+            <dd>
+                @Html.DisplayFor(model => model.OrderNumber)
+            </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.ClientName)
-        </dt>
+            <dt>
+                @Html.DisplayNameFor(model => model.ClientName)
+            </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.ClientName)
-        </dd>
+            <dd>
+                @Html.DisplayFor(model => model.ClientName)
+            </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.ClientCar)
-        </dt>
+            <dt>
+                @Html.DisplayNameFor(model => model.ClientCar)
+            </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.ClientCar)
-        </dd>
+            <dd>
+                @Html.DisplayFor(model => model.ClientCar)
+            </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.OrderDate)
-        </dt>
+            <dt>
+                @Html.DisplayNameFor(model => model.OrderDate)
+            </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.OrderDate)
-        </dd>
+            <dd>
+                @Html.DisplayFor(model => model.OrderDate)
+            </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.DTPDate)
-        </dt>
+            <dt>
+                @Html.DisplayNameFor(model => model.DTPDate)
+            </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.DTPDate)
-        </dd>
-    </dl>
-</div>
+            <dd>
+                @Html.DisplayFor(model => model.DTPDate)
+            </dd>
+        </dl>
+    </div>
 
-<div class="col-md-6">
-    <h4>Parts list:</h4>
-    <hr />
-    @Html.Action("Index", "Parts", new { id = Model.Id })
-</div>
+    <div class="col-md-6">
+        <div id="parts_list_container">
+            <h4>Parts list:</h4>
+            <hr />
+            @Html.Action("Index", "Parts", new { Orderid = Model.Id })
+        </div>
+        <br />
+        <div id="parts_create_container">
+            @Html.Action("Create", "Parts", new { OrderId = Model.Id })
+        </div>
+    </div>
+    
 </div>
 
 <p>

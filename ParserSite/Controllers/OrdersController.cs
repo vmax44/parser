@@ -50,7 +50,7 @@ namespace ParserSite.Controllers
         // GET: Orders/Create
         public ActionResult Create()
         {
-            return View();
+            return PartialView();
         }
 
         // POST: Orders/Create
@@ -67,7 +67,7 @@ namespace ParserSite.Controllers
                 return RedirectToAction("Index");
             }
 
-            return View(order);
+            return PartialView(order);
         }
 
         // GET: Orders/Edit/5
@@ -80,9 +80,9 @@ namespace ParserSite.Controllers
             Order order = db.Orders.Find(id);
             if (order == null)
             {
-                return HttpNotFound();
+                return View("Index");
             }
-            return View(order);
+            return PartialView(order);
         }
 
         // POST: Orders/Edit/5
@@ -98,7 +98,7 @@ namespace ParserSite.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(order);
+            return PartialView(order);
         }
 
         // GET: Orders/Delete/5
@@ -111,9 +111,9 @@ namespace ParserSite.Controllers
             Order order = db.Orders.Find(id);
             if (order == null)
             {
-                return HttpNotFound();
+                return View("Index");
             }
-            return View(order);
+            return PartialView(order);
         }
 
         // POST: Orders/Delete/5

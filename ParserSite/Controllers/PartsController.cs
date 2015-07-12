@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using ParserSite;
+using System.Threading;
 
 namespace ParserSite.Controllers
 {
@@ -15,15 +16,19 @@ namespace ParserSite.Controllers
         private ParserContext db = new ParserContext();
 
         // GET: Parts
-        public ActionResult Index(int id)
+        public ActionResult Index(int? OrderId)
         {
-            Order o = db.Orders.Find(id);
+            if (OrderId == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Order o = db.Orders.Find(OrderId);
             if (o == null)
             {
                 return HttpNotFound();
             }
-            var p = o.Parts.ToList();
-            return View(p.ToList());
+            
+            return View(o);
         }
 
         // GET: Parts/Details/5
@@ -42,9 +47,10 @@ namespace ParserSite.Controllers
         }
 
         // GET: Parts/Create
-        public ActionResult Create()
+        public ActionResult Create(int OrderId)
         {
-            return View();
+            ViewBag.OrderId = OrderId;
+            return PartialView();
         }
 
         // POST: Parts/Create
@@ -52,16 +58,24 @@ namespace ParserSite.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,PartNumber,PartName")] Part part)
+        public ActionResult Create([Bind(Include = "Id,PartNumber,PartName")] Part part,int OrderId)
         {
+            ViewBag.OrderId = OrderId;
             if (ModelState.IsValid)
             {
-                db.Parts.Add(part);
+                var o = db.Orders.Find(OrderId);
+                if (o == null)
+                {
+                    return HttpNotFound();
+                }
+                o.Parts.Add(part);
                 db.SaveChanges();
-                return RedirectToAction("Index","Orders",null);
+                //Thread.Sleep(5000);
+                return PartialView(new Part());
+                //return RedirectToAction("Index", "Parts", new { OrderId = OrderId });
             }
 
-            return View(part);
+            return PartialView(part);
         }
 
         // GET: Parts/Edit/5
