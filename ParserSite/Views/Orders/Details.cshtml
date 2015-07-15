@@ -5,70 +5,14 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@section Scripts {
+    @Scripts.Render("~/Scripts/order_details.js");
+    <script type="text/javascript">
+        index_parts_action = '@Url.Action("Index", "Parts", new { OrderId = Model.Id })';
+    </script>
+}
+
 <h2>Details</h2>
-
-<script type="text/javascript">
-
-    /**
-      * Функция для отправки формы средствами Ajax
-    **/
-    function AjaxFormRequest_func(form_id, url, func_ok, func_error) {
-        jQuery.ajax({
-            url: url, //Адрес подгружаемой страницы
-
-            type: "POST", //Тип запроса
-            dataType: "html", //Тип данных
-            data: jQuery("#" + form_id).serialize(),
-            success: func_ok,
-            error: func_error
-        });
-    }
-    function AjaxFormRequest(result_id, form_id, url) {
-        AjaxFormRequest_func(
-            form_id,
-            url,
-            function (response) { //Если все нормально
-                document.getElementById(result_id).innerHTML = response;
-            },
-            function (response) { //Если ошибка
-                document.getElementById(result_id).innerHTML = "Ошибка при отправке формы";
-            }
-        )
-    }
-
-    function AjaxRequest_func(url, func_ok, func_error) {
-        jQuery.ajax({
-            url: url, //Адрес подгружаемой страницы
-            type: "GET", //Тип запроса
-            dataType: "html", //Тип данных
-            success: func_ok,
-            error: func_error
-        });
-    }
-    function AjaxRequest(result_id, url) {
-        AjaxRequest_func(
-            url,
-            function (response) { //Если все нормально
-                document.getElementById(result_id).innerHTML = response;
-            },
-            function (response) { //Если ошибка
-                document.getElementById(result_id).innerHTML = 'Ошибка при отправке формы';
-            }
-        )
-    }
-
-    //Скрипты для создания запчасти
-    index_parts_action = '@Url.Action("Index", "Parts", new { OrderId = Model.Id })';
-
-    part_created_ok = function (res) {
-        AjaxRequest('parts_list_container',index_parts_action);
-        document.getElementById('parts_create_container').innerHTML = res;
-    }
-    part_created_error = function (res) {
-        document.getElementById('parts_create_container').innerHTML = 'Ошибка при отправке формы';
-    }
-
-</script>
 
 <div class="row">
     <div class="col-md-6">

@@ -1,5 +1,5 @@
 ﻿@model Order
-
+<form>
 <table class="table">
     <tr>
         <th>
@@ -13,19 +13,13 @@
 
 @foreach (var item in Model.Parts) {
     <tr>
+        <td onclick="script_(this)">@Html.DisplayFor(modelItem => item.PartNumber)</td>
+        <td onclick="script_(this)">@Html.DisplayFor(modelItem => item.PartName)</td>
         <td>
-            @Html.DisplayFor(modelItem => item.PartNumber)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.PartName)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id })
-            @if (item.ParsedDatas.Count == 0)
-            {
-               @Html.ActionLink("Delete", "Delete", new { id = item.Id });
-            }
+            <input type="checkbox" name="partsGroup" value=@item.Id @if (item.ParsedDatas.Count == 0) { @:checked
+                   }>
         </td>
     </tr>
 }
 </table>
+</form>
