@@ -46,8 +46,7 @@ function AjaxRequest(result_id, url) {
     )
 }
 
-//Скрипты для создания запчасти
-
+//Скрипты для создания и удаления запчасти
 
 part_created_ok = function (res) {
     AjaxRequest('parts_list_container', index_parts_action);
@@ -55,6 +54,17 @@ part_created_ok = function (res) {
 }
 part_created_error = function (res) {
     document.getElementById('parts_create_container').innerHTML = 'Ошибка при отправке формы';
+}
+
+part_deleting_ok = function (res) {
+    AjaxRequest('parts_list_container', index_parts_action);
+}
+part_deleting_error = function (res) {
+    document.getElementById('parts_create_container').innerHTML = 'Ошибка при отправке формы';
+}
+
+Parts_Delete_Click = function () {
+    document.forms["parts_delete_form"].submit();
 }
 
 //Скрипты для элементов ввода

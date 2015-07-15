@@ -127,12 +127,24 @@ namespace ParserSite.Controllers
         // POST: Parts/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public void Delete(int[] selectedparts, int OrderId)
         {
-            Part part = db.Parts.Find(id);
-            db.Parts.Remove(part);
-            db.SaveChanges();
-            return RedirectToAction("Index","Orders",null);
+            
+            var o = db.Orders.Find(OrderId);
+            if (o != null && selectedparts != null)
+            {
+                var s = from p in o.Parts
+                        where selectedparts.Contains(p.Id)
+                        select p;
+                
+                foreach (var p in s.ToList())
+                {
+                    p.Order = null;
+                    o.Parts.Remove(p);
+                }
+                
+                db.SaveChanges();
+            }
         }
 
         protected override void Dispose(bool disposing)

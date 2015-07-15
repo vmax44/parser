@@ -1,25 +1,35 @@
 ﻿@model Order
-<form>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayName("Каталожный номер")
-        </th>
-        <th>
-            @Html.DisplayName("Наименование")
-        </th>
-        <th></th>
-    </tr>
+@using (Html.BeginForm("Delete", "Parts", new { OrderId = ViewBag.OrderId }, FormMethod.Post,
+    new
+    {
+        id = "parts_delete_form",
+        onsubmit = "AjaxFormRequest_func('parts_delete_form','" +
+        @Url.Action("Delete", "Parts", new { OrderId = ViewBag.OrderId }) +
+        "', part_deleting_ok, part_deleting_error);return false;"
+    }))
+{
+    @Html.AntiForgeryToken()
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayName("Каталожный номер")
+            </th>
+            <th>
+                @Html.DisplayName("Наименование")
+            </th>
+            <th></th>
+        </tr>
 
-@foreach (var item in Model.Parts) {
-    <tr>
-        <td onclick="script_(this)">@Html.DisplayFor(modelItem => item.PartNumber)</td>
-        <td onclick="script_(this)">@Html.DisplayFor(modelItem => item.PartName)</td>
-        <td>
-            <input type="checkbox" name="partsGroup" value=@item.Id @if (item.ParsedDatas.Count == 0) { @:checked
-                   }>
-        </td>
-    </tr>
+        @foreach (var item in Model.Parts)
+        {
+            <tr>
+                <td onclick="script_(this)">@Html.DisplayFor(modelItem => item.PartNumber)</td>
+                <td onclick="script_(this)">@Html.DisplayFor(modelItem => item.PartName)</td>
+                <td>
+                    <input type="checkbox" name="selectedparts" value=@item.Id @if (item.ParsedDatas.Count == 0) { } else { @: disabled
+                                                                                                  }>
+                </td>
+            </tr>
+        }
+    </table>
 }
-</table>
-</form>
