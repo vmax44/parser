@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using ParserSite;
+using Vmax44Parser.library;
 
 namespace ParserSite.Controllers
 {
@@ -14,6 +15,16 @@ namespace ParserSite.Controllers
     {
         private ParserContext db = new ParserContext();
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Parse(int[] selectedparts)
+        {
+            using (Parser browser = new ParserWatinAutodoc())
+            {
+
+            }
+            return View();
+        }
         // GET: ParsedDatas
         public ActionResult Index()
         {

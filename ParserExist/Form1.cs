@@ -56,8 +56,8 @@ namespace Vmax44Parser
                 codesEx.Workbooks.Open(Path.Combine(Application.StartupPath, "code.xlsx"));
 
                 var row = 1;
-                
-                while ((codesEx.Cells[row, 2].Value!=null)&&(codesEx.Cells[row,2].Value!=""))
+
+                while ((codesEx.Cells[row, 2].Value != null) && (codesEx.Cells[row, 2].Value != ""))
                 {
                     detailCode = codesEx.Cells[row, 2].Value;
                     dataBase.AddRange(browser.detailParse(detailCode));

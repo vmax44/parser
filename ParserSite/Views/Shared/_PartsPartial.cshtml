@@ -3,12 +3,11 @@
     new
     {
         id = "parts_delete_form",
-        onsubmit = "AjaxFormRequest_func('parts_delete_form','" +
-        @Url.Action("Delete", "Parts", new { OrderId = ViewBag.OrderId }) +
-        "', part_deleting_ok, part_deleting_error);return false;"
     }))
 {
     @Html.AntiForgeryToken()
+    <h4>Parts list:</h4>
+    <hr />
     <table class="table">
         <tr>
             <th>
@@ -26,8 +25,7 @@
                 <td onclick="script_(this)">@Html.DisplayFor(modelItem => item.PartNumber)</td>
                 <td onclick="script_(this)">@Html.DisplayFor(modelItem => item.PartName)</td>
                 <td>
-                    <input type="checkbox" name="selectedparts" value=@item.Id @if (item.ParsedDatas.Count == 0) { } else { @: disabled
-                                                                                                  }>
+                    <input type="checkbox" name="selectedparts" value="@item.Id" />
                 </td>
             </tr>
         }

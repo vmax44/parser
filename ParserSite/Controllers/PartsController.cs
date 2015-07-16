@@ -27,7 +27,7 @@ namespace ParserSite.Controllers
             {
                 return HttpNotFound();
             }
-            
+            ViewBag.OrderId = OrderId;
             return View(o);
         }
 
@@ -135,12 +135,13 @@ namespace ParserSite.Controllers
             {
                 var s = from p in o.Parts
                         where selectedparts.Contains(p.Id)
+                        where p.ParsedDatas.Count==0
                         select p;
                 
                 foreach (var p in s.ToList())
                 {
-                    p.Order = null;
-                    o.Parts.Remove(p);
+                    db.Parts.Remove(p);
+                    //o.Parts.Remove(p);
                 }
                 
                 db.SaveChanges();

@@ -63,8 +63,10 @@ part_deleting_error = function (res) {
     document.getElementById('parts_create_container').innerHTML = 'Ошибка при отправке формы';
 }
 
-Parts_Delete_Click = function () {
-    document.forms["parts_delete_form"].submit();
+function Parts_Delete_Click() {
+    var f_delete = document.forms["parts_delete_form"];
+    AjaxFormRequest_func(f_delete.id, f_delete.action, part_deleting_ok, part_deleting_error);
+    return false;
 }
 
 //Скрипты для элементов ввода
