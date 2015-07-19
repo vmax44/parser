@@ -69,6 +69,13 @@ function Parts_Delete_Click() {
     return false;
 }
 
+function Parts_Parse_Click(Url) {
+    var f_parse = document.forms["parts_delete_form"];
+    f_parse.action = Url;
+    f_parse.submit();
+    //return false;
+}
+
 //Скрипты для элементов ввода
 function Killer(whf) {
     name = whf.value;

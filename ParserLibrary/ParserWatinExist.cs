@@ -15,7 +15,7 @@ namespace Vmax44Parser.library
         public ParserWatinExist(string f = "pass.xlsx")
             : base()
         {
-            this.ParserType = "Exist.ru";
+            ParserType = "Exist.ru";
 
             pagesType = new List<PType>
             {   
@@ -80,7 +80,7 @@ namespace Vmax44Parser.library
                             statistic = "",
                             price = 0,
                             url = "",
-                            parsertype = this.ParserType
+                            parsertype = GetParserType()
                         });
                         this.GoToAndWaitFinish("http://exist.ru");
                         Thread.Sleep(100);

@@ -6,12 +6,30 @@ using Vmax44ParserConnectedLayer;
 
 namespace Vmax44Parser.library
 {
-    abstract public class Parser: IDisposable
+    public interface IParser
+    {
+
+        /// <summary>
+        /// Парсинг страницы
+        /// </summary>
+        /// <param name="detailCode"></param>
+        /// <returns></returns>
+        ParsedDataCollection detailParse(string detailCode);
+
+        string GetParserType();
+    }
+
+    abstract public class Parser: IDisposable, IParser
     {
         /// <summary>
         /// Содержит строку-название парсера
         /// </summary>
-        public string ParserType;
+        protected string ParserType = "";
+
+        public string GetParserType()
+        {
+            return ParserType;
+        }
 
         /// <summary>
         /// Содержит исходный код последней загруженной версии страницы
@@ -32,15 +50,8 @@ namespace Vmax44Parser.library
         /// <summary>
         /// Функция внешнего объекта, позволяющая выбрать строку из переданного списка
         /// </summary>
-        public Func<List<string>,string> GetSelectedManufacturer; 
+        public Func<List<string>, string> GetSelectedManufacturer;
 
-        //public SelectFromStringList GetSelectedManufacturer;
-
-        /// <summary>
-        /// Парсинг страницы
-        /// </summary>
-        /// <param name="detailCode"></param>
-        /// <returns></returns>
         public abstract ParsedDataCollection detailParse(string detailCode);
 
         /// <summary>

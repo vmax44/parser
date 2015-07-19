@@ -26,7 +26,8 @@
             <td>
                 <input type="submit" value="Add" class="btn btn-default" />
                 <a href="#" class="btn btn-default" onclick="Parts_Delete_Click(); return false;">Delete</a>
-                <a href="#" class="btn btn-default" onclick="Parts_Parse_Click(); return false;">Parse</a>
+                <a href="#" class="btn btn-default" onclick="Parts_Parse_Click('@Url.Action("Parse", "ParsedDatas",
+                new { OrderId = ViewBag.OrderId })'); return false;">Parse!</a>
             </td>
         </tr>
     </table>

@@ -39,6 +39,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.AspNet.SignalR.Core">
+      <HintPath>..\packages\Microsoft.AspNet.SignalR.Core.2.2.0\lib\net45\Microsoft.AspNet.SignalR.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.SystemWeb">
+      <HintPath>..\packages\Microsoft.AspNet.SignalR.SystemWeb.2.2.0\lib\net45\Microsoft.AspNet.SignalR.SystemWeb.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -249,6 +255,8 @@
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery-ui-1.11.4.js" />
     <Content Include="Scripts\jquery-ui-1.11.4.min.js" />
+    <Content Include="Scripts\jquery.signalR-2.2.0.js" />
+    <Content Include="Scripts\jquery.signalR-2.2.0.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -313,6 +321,7 @@
     <Content Include="Views\Parts\Index.cshtml" />
     <Content Include="Views\Shared\_PartsPartial.cshtml" />
     <Content Include="Views\Parts\Create.cshtml" />
+    <Content Include="Views\ParsedDatas\Parse.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -336,6 +345,10 @@
     <ProjectReference Include="..\ParserLibrary\ParserLibrary.csproj">
       <Project>{90fb7556-c09c-4f3f-a7a8-c9f48127b06e}</Project>
       <Name>ParserLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vmax44ParserDAL\Vmax44ParserDAL.csproj">
+      <Project>{9f4b5f4c-5e98-4e30-a4bb-a134bb035c33}</Project>
+      <Name>Vmax44ParserDAL</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

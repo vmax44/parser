@@ -17,7 +17,7 @@ namespace Vmax44Parser.library
         public ParserWatinAutodoc(string f = "pass.xlsx")
             : base()
         {
-            this.ParserType = "Autodoc.ru";
+            ParserType = "autodoc.ru";
 
             pagesType = new List<PType>
             {   
@@ -112,7 +112,7 @@ namespace Vmax44Parser.library
                             statistic = "",
                             price = 0,
                             url = "",
-                            parsertype = this.ParserType
+                            parsertype = GetParserType()
                         });
                         this.browser.GoToNoWait("http://www.autodoc.ru");
                         done = true;
@@ -200,7 +200,7 @@ namespace Vmax44Parser.library
                 original.desc = desc;
                 original.statistic = statistic;
                 original.price = price;
-                original.parsertype = this.ParserType;
+                original.parsertype = GetParserType();
                 original.url = this.browser.Url;
 
                 dataColl.Add(original);

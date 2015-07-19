@@ -8,26 +8,58 @@ using System.Web;
 using System.Web.Mvc;
 using ParserSite;
 using Vmax44Parser.library;
+using ParserLibrary;
 
 namespace ParserSite.Controllers
 {
+    public static class MyExtentions
+    {
+        public static List<ParsedData> ToParsedData(this Vmax44ParserConnectedLayer.ParsedDataCollection parsed)
+        {
+            List<ParsedData> result = new List<ParsedData>();
+            foreach (var p in parsed)
+            {
+                var r = new ParsedData();
+                r.Description = p.desc;
+                r.Firmname = p.firmname;
+                r.Original = p.orig;
+                r.ParseDate = DateTime.Today;
+                r.ParserType = p.parsertype;
+                r.Price = p.price;
+                r.SearchedArtikul = p.searchedArtikul;
+                r.Statistic = p.statistic;
+                r.Url = p.url;
+                result.Add(r);
+            }
+            return result;
+        }
+    }
+
     public class ParsedDatasController : Controller
     {
         private ParserContext db = new ParserContext();
 
+        // POST: Form to select parsers and start parse
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Parse(int[] selectedparts)
+        public ActionResult Parse(int[] selectedParts, int OrderId)
         {
-            using (Parser browser = new ParserWatinAutodoc())
-            {
+            ViewBag.SelectedParts = selectedParts;
+            ViewBag.OrderId = OrderId;
+            ParsersManager pm = new ParsersManager();
+            return View(pm.GetAvailableParsers());
+        }
 
-            }
+        // POST: Start parse process and return parsed data
+        [HttpPost]
+        public ActionResult StartParse(int[] selectedParts, int OrderId, int[] parsers)
+        {
             return View();
         }
+
         // GET: ParsedDatas
-        public ActionResult Index()
+        public ActionResult Index(int OrderId)
         {
+            ViewBag.OrderId = OrderId;
             return View(db.ParsedDatas.ToList());
         }
 
