@@ -8,6 +8,7 @@
 <p>Выберите необходимые парсеры:</p>
 @using (Ajax.BeginForm("StartParse", null))
 {
+    @Html.AntiForgeryToken()
     <input type="hidden" name="OrderId" value="@ViewBag.OrderId" />
     foreach(var p in ViewBag.selectedParts){
         <input type="hidden" name="selectedParts" value="@p" />
@@ -20,7 +21,7 @@
     @foreach (KeyValuePair<int,string> p in Model) { 
         <tr>
             <td>
-                <input type="checkbox" name="selectedParsers" value="@p.Key" />
+                <input type="checkbox" name="selectedParsers" value="@p.Key" checked/>
             </td>
             <td>
                 @p.Value

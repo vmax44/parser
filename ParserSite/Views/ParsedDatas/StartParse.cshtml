@@ -1,0 +1,10 @@
+﻿OrderId: @ViewBag.OrderId <br />
+selectedParts: <br />
+               @foreach(int s in ViewBag.selectedParts) {
+                   @s <br />
+               }
+parsers: <br />
+         @foreach (int p in ViewBag.parsers)
+         {
+             @p <br />
+         }

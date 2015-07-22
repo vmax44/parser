@@ -51,8 +51,12 @@ namespace ParserSite.Controllers
 
         // POST: Start parse process and return parsed data
         [HttpPost]
-        public ActionResult StartParse(int[] selectedParts, int OrderId, int[] parsers)
+        [ValidateAntiForgeryToken]
+        public ActionResult StartParse(int[] selectedParts, int OrderId, int[] selectedParsers)
         {
+            ViewBag.selectedParts = selectedParts;
+            ViewBag.OrderId = OrderId;
+            ViewBag.parsers = selectedParsers;
             return View();
         }
 
