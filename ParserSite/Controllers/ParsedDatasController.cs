@@ -57,7 +57,37 @@ namespace ParserSite.Controllers
             ViewBag.selectedParts = selectedParts;
             ViewBag.OrderId = OrderId;
             ViewBag.parsers = selectedParsers;
-            return View();
+            Order order=db.Orders.Find(OrderId);
+            string log = "";
+            ParsersManager pm = new ParsersManager();
+            var parsers = pm.GetParsersByArrayIds(selectedParsers);
+            List<ParsedData> parsed=new List<ParsedData>();
+            foreach (var part in selectedParts)
+            {
+                foreach (var parser in parsers)
+                {
+                    var parsertype=parser.GetParserType();
+                    var dbpart=db.Parts.Find(part);
+                    var r= parser.detailParse(dbpart.PartNumber).ToParsedData();
+                    foreach(var r1 in r) {
+                        r1.Order = order;
+                        r1.Part = dbpart;
+                        order.ParsedDatas.Add(r1);
+                    }
+                    parsed.AddRange(r);
+                    log += String.Format("Распарсены предложения по запчасти {0} на сайте {1}\r\n", dbpart.PartNumber, parsertype);
+                    /*foreach(var r1 in r) {
+                        log += r1.ToString() + "\r\n";
+                    }*/
+                }
+            }
+            if (parsed.Count > 0)
+            {
+                db.SaveChanges();
+            }
+            ViewBag.log = log;
+            ViewBag.Parsed = parsed;
+            return PartialView();
         }
 
         // GET: ParsedDatas

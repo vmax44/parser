@@ -1,4 +1,7 @@
-﻿OrderId: @ViewBag.OrderId <br />
+﻿@{
+    IEnumerable<ParsedData> parsedList = ViewBag.Parsed;
+}
+OrderId: @ViewBag.OrderId <br />
 selectedParts: <br />
                @foreach(int s in ViewBag.selectedParts) {
                    @s <br />
@@ -8,3 +11,7 @@ parsers: <br />
          {
              @p <br />
          }
+log:<br />
+@ViewBag.log
+<br />
+@Html.Partial("_ParsedDataPartial", parsedList)

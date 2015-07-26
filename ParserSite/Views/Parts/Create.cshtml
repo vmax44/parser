@@ -1,8 +1,9 @@
 ﻿@model ParserSite.Part
 
-@using (Html.BeginForm("Create", "Parts", new { OrderId = ViewBag.OrderId }, FormMethod.Post,
+@using (Html.BeginForm("Create", "Parts", new { OrderId = ViewBag.OrderId },FormMethod.Post,
     new
     {
+        @class="well form-inline",
         id = "parts_create_form",
         onsubmit = "AjaxFormRequest_func('parts_create_form','" +
         @Url.Action("Create", "Parts", new { OrderId = ViewBag.OrderId }) +
@@ -12,23 +13,16 @@
     @Html.AntiForgeryToken()
 
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    
-    <table class="table">
-        <tr>
-            <td>
-                @Html.EditorFor(model => model.PartNumber, new { htmlAttributes = new { @class = "form-control" } })
+
+                @Html.EditorFor(model => model.PartNumber, new { htmlAttributes = new { @class = "input-small",
+                                        placeholder="Номер"} })
                 @Html.ValidationMessageFor(model => model.PartNumber, "", new { @class = "text-danger" })
-            </td>
-            <td>
-                @Html.EditorFor(model => model.PartName, new { htmlAttributes = new { @class = "form-control" } })
+
+                @Html.EditorFor(model => model.PartName, new { htmlAttributes = new { @class = "input-small", 
+                                        placeholder="Наименование"} })
                 @Html.ValidationMessageFor(model => model.PartName, "", new { @class = "text-danger" })
-            </td>
-            <td>
                 <input type="submit" value="Add" class="btn btn-default" />
                 <a href="#" class="btn btn-default" onclick="Parts_Delete_Click(); return false;">Delete</a>
                 <a href="#" class="btn btn-default" onclick="Parts_Parse_Click('@Url.Action("Parse", "ParsedDatas",
                 new { OrderId = ViewBag.OrderId })'); return false;">Parse!</a>
-            </td>
-        </tr>
-    </table>
 }
