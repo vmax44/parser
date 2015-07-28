@@ -74,6 +74,7 @@ namespace ParserSite.Controllers
                         r1.Part = dbpart;
                         order.ParsedDatas.Add(r1);
                     }
+                    
                     parsed.AddRange(r);
                     log += String.Format("Распарсены предложения по запчасти {0} на сайте {1}\r\n", dbpart.PartNumber, parsertype);
                     /*foreach(var r1 in r) {
