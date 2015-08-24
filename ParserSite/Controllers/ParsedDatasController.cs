@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
-using ParserSite;
-using Vmax44Parser.library;
 using ParserLibrary;
 
 namespace ParserSite.Controllers
@@ -19,11 +15,11 @@ namespace ParserSite.Controllers
             List<ParsedData> result = new List<ParsedData>();
             foreach (var p in parsed)
             {
-                var r = new ParsedData();
+                ParsedData r = new ParsedData();
                 r.Description = p.desc;
                 r.Firmname = p.firmname;
                 r.Original = p.orig;
-                r.ParseDate = DateTime.Today;
+                r.ParseDate = DateTime.Now;
                 r.ParserType = p.parsertype;
                 r.Price = p.price;
                 r.SearchedArtikul = p.searchedArtikul;
@@ -35,14 +31,49 @@ namespace ParserSite.Controllers
         }
     }
 
+
+    public class ParseState
+    {
+        public int[] selectedParts;
+        public int[] selectedParsers;
+        public int OrderId;
+        public int currentPart;
+        public int currentParser;
+        public Dictionary<int, List<ParsedData>> parsed;
+        public Dictionary<int, string> SelectedStrings = new Dictionary<int, string>();
+        public List<string> log = new List<string>();
+        public List<string> parserslog = new List<string>();
+
+        public ParseState()
+        {
+            parsed = new Dictionary<int, List<ParsedData>>();
+            currentParser = 0;
+            currentPart = 0;
+        }
+    }
+
     public class ParsedDatasController : Controller
     {
         private ParserContext db = new ParserContext();
+
+        private void AddError(string s)
+        {
+            if (TempData["Errors"] == null)
+            {
+                TempData["Errors"] = new List<string>();
+            }
+            (TempData["Errors"] as List<string>).Add(s);
+        }
 
         // POST: Form to select parsers and start parse
         [HttpPost]
         public ActionResult Parse(int[] selectedParts, int OrderId)
         {
+            if (selectedParts == null)
+            {
+                AddError("Выберите элементы для парсинга");
+                return RedirectToAction("Details", "Orders", new { Id = OrderId });
+            }
             ViewBag.SelectedParts = selectedParts;
             ViewBag.OrderId = OrderId;
             ParsersManager pm = new ParsersManager();
@@ -54,48 +85,142 @@ namespace ParserSite.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult StartParse(int[] selectedParts, int OrderId, int[] selectedParsers)
         {
-            ViewBag.selectedParts = selectedParts;
-            ViewBag.OrderId = OrderId;
-            ViewBag.parsers = selectedParsers;
-            Order order=db.Orders.Find(OrderId);
-            string log = "";
-            ParsersManager pm = new ParsersManager();
-            var parsers = pm.GetParsersByArrayIds(selectedParsers);
-            List<ParsedData> parsed=new List<ParsedData>();
-            foreach (var part in selectedParts)
+            if (selectedParts == null)
             {
-                foreach (var parser in parsers)
+                AddError("Выберите элементы для парсинга");
+                return RedirectToAction("Details", "Orders", new { Id = OrderId });
+            }
+            if (selectedParsers == null)
+            {
+                AddError("Выберите необходимые парсеры");
+                return RedirectToAction("Parse", new { OrderId = OrderId });
+            }
+            ParseState st = new ParseState()
+             {
+                 selectedParsers = selectedParsers,
+                 selectedParts = selectedParts,
+                 OrderId = OrderId
+             };
+            Session.Add("state", st);
+            return StartParse2(string.Empty);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult StartParse2(string selectedString)
+        {
+            ParseState st = (ParseState)Session["state"]; //достаем из сессии информацию о текущем состоянии парсинга
+            if (st == null)
+            {
+                return HttpNotFound();
+            }
+            Order order = db.Orders.Find(st.OrderId);
+            ParsersManager pm = new ParsersManager();
+            var parsers = pm.GetParsersByArrayIds(st.selectedParsers); //получаем необходимые парсеры
+            foreach (KeyValuePair<int, string> kvp in st.SelectedStrings)
+            {
+                parsers[kvp.Key].setSelectedString(kvp.Value); //сохраняем в парсеры ранее выбранных производителей
+            }
+            bool juststarted = true; //переменная для того, чтобы определить, что мы только что попали в функцию
+            //и необходимо продолжить парсить тем парсером, на котором остановились ранее
+            for (; st.currentPart < st.selectedParts.Count(); st.currentPart++)
+            {
+                var dbpart = db.Parts.Find(st.selectedParts[st.currentPart]);
+                if (juststarted)
                 {
-                    var parsertype=parser.GetParserType();
-                    var dbpart=db.Parts.Find(part);
-                    var r= parser.detailParse(dbpart.PartNumber).ToParsedData();
-                    foreach(var r1 in r) {
-                        r1.Order = order;
-                        r1.Part = dbpart;
-                        order.ParsedDatas.Add(r1);
+                    juststarted = false;
+                }
+                else
+                {
+                    st.currentParser = 0;
+                }
+                for (; st.currentParser < st.selectedParsers.Count(); st.currentParser++)
+                {
+                    if (selectedString != string.Empty)   //если выбрана новая строка
+                    {
+                        st.SelectedStrings.Add(st.currentParser, selectedString);  //сохраняем ее в объект статуса
+                        parsers[st.currentParser].setSelectedString(selectedString); //а также в соответствующий парсер
+                        selectedString = string.Empty;
                     }
-                    
-                    parsed.AddRange(r);
-                    log += String.Format("Распарсены предложения по запчасти {0} на сайте {1}\r\n", dbpart.PartNumber, parsertype);
-                    /*foreach(var r1 in r) {
-                        log += r1.ToString() + "\r\n";
-                    }*/
+                    var parsertype = parsers[st.currentParser].GetParserType();
+                    var PartNumber = from part in order.Parts
+                                     where part.Id == st.selectedParts[st.currentPart]
+                                     select part.PartNumber;
+                    st.log.Add(string.Format(" парсим деталь {0} на сайте {1}...", PartNumber.First(), parsertype));
+                    var r = parsers[st.currentParser].detailParse(PartNumber.First()).ToParsedData();
+                    switch (parsers[st.currentParser].getError())
+                    {
+                        case 1:
+                            st.log.Add("!требуется выбор производителя");
+                            DisposeParsers(st, parsers);
+                            ViewBag.st = st;
+                            Session["state"] = st;
+                            return PartialView("_SelectManufacturer", parsers[st.currentParser].getStringsToSelect());
+                        case 0:
+                            st.log.Add(string.Format("Ok. напарсено {0} результатов", r.Count));
+                            if (st.parsed.ContainsKey(st.currentPart))
+                            {
+                                st.parsed[st.currentPart].AddRange(r);
+                            }
+                            else
+                            {
+                                st.parsed[st.currentPart] = r;
+                            }
+                            break;
+                        case 2:
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
-            if (parsed.Count > 0)
+            DisposeParsers(st, parsers);
+            ViewBag.st = st;
+            return PartialView("StartParse");
+        }
+
+        private static void DisposeParsers(ParseState st, List<Vmax44Parser.library.IParser> parsers)
+        {
+            foreach (var parser in parsers)
             {
-                db.SaveChanges();
+                st.parserslog.AddRange(parser.GetLog());
+                parser.Dispose();
             }
-            ViewBag.log = log;
-            ViewBag.Parsed = parsed;
-            return PartialView();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult SaveParse()
+        {
+            DateTime saveDate = DateTime.Now;
+            ParseState st = (ParseState)Session["state"];
+            if (st == null)
+            {
+                return HttpNotFound();
+            }
+
+            Order order = db.Orders.Find(st.OrderId);
+            foreach (KeyValuePair<int, List<ParsedData>> p in st.parsed)
+            {
+                Part part = db.Parts.Find(st.selectedParts[p.Key]);
+                foreach (ParsedData entry in p.Value)
+                {
+                    entry.Order = order;
+                    entry.Part = part;
+                    entry.ParseDate = saveDate;
+                    order.ParsedDatas.Add(entry);
+                }
+            }
+            db.SaveChanges();
+            Session.Remove("state");
+            return RedirectToAction("Details", "Orders", new { id = st.OrderId });
         }
 
         // GET: ParsedDatas
         public ActionResult Index(int OrderId)
         {
             ViewBag.OrderId = OrderId;
-            return View(db.ParsedDatas.ToList());
+            return PartialView("_ParsedDataPartial", db.ParsedDatas.ToList());
         }
 
         // GET: ParsedDatas/Details/5
@@ -185,12 +310,18 @@ namespace ParserSite.Controllers
         // POST: ParsedDatas/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult DeleteConfirmed(IEnumerable<int> selectedDatas, string OrderId)
         {
-            ParsedData parsedData = db.ParsedDatas.Find(id);
-            db.ParsedDatas.Remove(parsedData);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            if (selectedDatas != null)          //Если выбрана хотя бы одна строка для удаления
+            {
+                foreach (var id in selectedDatas)
+                {
+                    ParsedData parsedData = db.ParsedDatas.Find(id);
+                    db.ParsedDatas.Remove(parsedData);
+                }
+                db.SaveChanges();
+            }
+            return RedirectToAction("Index", new { OrderId = OrderId });
         }
 
         protected override void Dispose(bool disposing)

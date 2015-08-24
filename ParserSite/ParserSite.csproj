@@ -193,6 +193,10 @@
     <Compile Include="Migrations\201507121854479_add required to partnumber.Designer.cs">
       <DependentUpon>201507121854479_add required to partnumber.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201508121916161_date-to-datetime.cs" />
+    <Compile Include="Migrations\201508121916161_date-to-datetime.Designer.cs">
+      <DependentUpon>201508121916161_date-to-datetime.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -315,7 +319,7 @@
     <Content Include="Views\ParsedDatas\Details.cshtml" />
     <Content Include="Views\ParsedDatas\Edit.cshtml" />
     <Content Include="Views\ParsedDatas\Index.cshtml" />
-    <Content Include="Views\Shared\_ParsedDataPartial.cshtml" />
+    <Content Include="Views\Shared\_ParsedDataPartial_old.cshtml" />
     <Content Include="Views\Orders\IndexAjax.cshtml" />
     <Content Include="Views\Parts\Delete.cshtml" />
     <Content Include="Views\Parts\Details.cshtml" />
@@ -325,6 +329,8 @@
     <Content Include="Views\Parts\Create.cshtml" />
     <Content Include="Views\ParsedDatas\Parse.cshtml" />
     <Content Include="Views\ParsedDatas\StartParse.cshtml" />
+    <Content Include="Views\Shared\_SelectManufacturer.cshtml" />
+    <Content Include="Views\Shared\_ParsedDataPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -342,6 +348,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201507121854479_add required to partnumber.resx">
       <DependentUpon>201507121854479_add required to partnumber.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201508121916161_date-to-datetime.resx">
+      <DependentUpon>201508121916161_date-to-datetime.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

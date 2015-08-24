@@ -1,87 +1,88 @@
 ﻿@model IEnumerable<ParsedData>
-
-@{
-    var ParserTypes = Model.GroupBy(o => o.ParserType.Trim())
-        .Select(p => p.Key)
-        .ToList();
-}
-
-<table class="table-bordered">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Order.OrderNumber)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ParseDate)
-        </th>
-@foreach (var p in ParserTypes)
+@if (Model.Count() > 0)
 {
-        <th>
-            @p
-        </th>
-}
-        <th>
-            @Html.DisplayNameFor(model => model.Original)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Firmname)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Part.PartNumber)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Description)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Statistic)
-        </th>
+    using (Ajax.BeginForm("Delete", "ParsedDatas", new { OrderId = ViewBag.OrderId }, new AjaxOptions
+        {
+            Confirm = "Удалить выбранные строки?",
+            UpdateTargetId = "ParsedDatas"
 
-        <th>
-            @Html.DisplayNameFor(model => model.Url)
-        </th>
-        <th>Возможные действия</th>
-    </tr>
-
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Order.OrderNumber)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ParseDate)
-        </td>
-    @foreach (var p in ParserTypes)
+        }))
     {
-        <td>
-            @if (item.ParserType.Trim() == p.Trim())
+        @Html.AntiForgeryToken()
+        <table class="table-bordered">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Order.OrderNumber)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ParseDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ParserType)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Original)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Firmname)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Part.PartNumber)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Description)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Price)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Statistic)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Url)
+                </th>
+                <th>Возможные действия</th>
+            </tr>
+
+            @foreach (var item in Model)
             {
-                @Html.DisplayFor(modelItem=>item.Price)
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Order.OrderNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ParseDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ParserType)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Original)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Firmname)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Part.PartNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Price)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Statistic)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Url)
+                    </td>
+                    <td>
+                        <input type="checkbox" name="selectedDatas" value="@item.Id" checked />
+                    </td>
+                </tr>
             }
-        </td>
+        </table>
+        <input type="submit" value="Delete" />
     }
-        <td>
-            @Html.DisplayFor(modelItem => item.Original)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Firmname)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Part.PartNumber)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Description)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Statistic)
-        </td>
-
-        <td>
-            @Html.DisplayFor(modelItem => item.Url)
-        </td>
-        <td>
-            @Html.ActionLink("Delete", "Delete", "ParsedDatas", new { id = item.Id }, new { @class="btn btn-small"})
-        </td>
-    </tr>
 }
-
-</table>

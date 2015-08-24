@@ -166,11 +166,6 @@ namespace Vmax44Parser.library
             return WaitText(textToWait);
         }
 
-        static public void log(string str)
-        {
-            Trace.WriteLine(str);
-        }
-
         //to delete
         public bool WaitFinish()
         {

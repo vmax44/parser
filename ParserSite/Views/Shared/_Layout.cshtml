@@ -34,6 +34,16 @@
         </div>
     </div>
     <div class="container body-content">
+        @if (TempData["Errors"] != null)
+        {
+            foreach (var err in (IEnumerable<string>)TempData["Errors"])
+            {
+                <div class="alert alert-danger">
+                    <a href="#" class="close" data-dismiss="alert">×</a>
+                    @err
+            </div>
+            }
+        }
         @RenderBody()
         <hr />
         <footer>

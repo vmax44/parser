@@ -234,5 +234,25 @@ namespace Vmax44Parser.library
 
 
 
+
+        public override int getError()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override string getErrorMessage()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override IEnumerable<string> getStringsToSelect()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void setSelectedString(string s)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

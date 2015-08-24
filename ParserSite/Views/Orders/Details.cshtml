@@ -77,10 +77,11 @@
     @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
     @Html.ActionLink("Back to List", "Index")
 </p>
-@if (Model.ParsedDatas.Count > 0)
-{
-    Html.RenderPartial("_ParsedDataPartial", Model.ParsedDatas);
-}
+<div id="ParsedDatas">
+    @{
+        Html.RenderAction("Index", "ParsedDatas", new { OrderId = Model.Id });
+    }
+</div>
 
 @if (Model.Report != null)
 {

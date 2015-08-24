@@ -5,45 +5,39 @@
 }
 
 <h2>Parse</h2>
-<div class="row">
-    <div class="col-md-4 panel panel-default">
-        <div class="panel-heading">
-            Выберите необходимые парсеры:
-        </div>
-        <div class="panel-body">
-            @using (Ajax.BeginForm("StartParse", new AjaxOptions
+<div id="ParseResults" class="panel panel-default">
+    <div class="panel-heading">
+        Выберите необходимые парсеры:
+    </div>
+    <div class="panel-body">
+        @using (Ajax.BeginForm("StartParse", new AjaxOptions
             {
                 UpdateTargetId = "ParseResults",
             }))
+        {
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="OrderId" value="@ViewBag.OrderId" />
+            foreach (var p in ViewBag.selectedParts)
             {
-                @Html.AntiForgeryToken()
-                <input type="hidden" name="OrderId" value="@ViewBag.OrderId" />
-                foreach (var p in ViewBag.selectedParts)
-                {
-                    <input type="hidden" name="selectedParts" value="@p" />
-                }
-                <table class="table table-condensed table-striped">
-                    <tr>
-                        <th>Наименование</th>
-                    </tr>
-                    @foreach (KeyValuePair<int, string> p in Model)
-                    {
-                        <tr>
-                            <td>
-                                <label class="checkbox">
-                                    <input type="checkbox" name="selectedParsers" value="@p.Key" checked />
-                                    @p.Value
-                                </label>
-                            </td>
-                        </tr>
-                    }
-                </table>
-                <input type="submit" value="Parse" />
+                <input type="hidden" name="selectedParts" value="@p" />
             }
-        </div>
-    </div>
-    <div class="col-md-8 panel panel-default">
-        <div class="panel-heading">Результат парсинга:</div>
-        <div id="ParseResults" class="panel-body"></div>
+            <table class="table table-condensed table-striped">
+                <tr>
+                    <th>Наименование</th>
+                </tr>
+                @foreach (KeyValuePair<int, string> p in Model)
+                {
+                    <tr>
+                        <td>
+                            <label class="checkbox">
+                                <input type="checkbox" name="selectedParsers" value="@p.Key" checked />
+                                @p.Value
+                            </label>
+                        </td>
+                    </tr>
+                }
+            </table>
+            <input type="submit" value="Parse" />
+        }
     </div>
 </div>

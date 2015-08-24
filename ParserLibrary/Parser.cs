@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Vmax44ParserConnectedLayer;
 
 namespace Vmax44Parser.library
@@ -15,8 +13,13 @@ namespace Vmax44Parser.library
         /// <param name="detailCode"></param>
         /// <returns></returns>
         ParsedDataCollection detailParse(string detailCode);
-
+        int getError();
+        string getErrorMessage();
+        IEnumerable<string> getStringsToSelect();
+        void setSelectedString(string s);
         string GetParserType();
+        List<string> GetLog();
+        void Dispose();
     }
 
     abstract public class Parser: IDisposable, IParser
@@ -25,6 +28,8 @@ namespace Vmax44Parser.library
         /// Содержит строку-название парсера
         /// </summary>
         protected string ParserType = "";
+
+        protected List<string> _log = new List<string>();
 
         public string GetParserType()
         {
@@ -61,5 +66,25 @@ namespace Vmax44Parser.library
         protected abstract PTypeEnum getCurrentPageType();
 
         abstract public void Dispose();
+
+
+        public abstract int getError();
+
+        public abstract string getErrorMessage();
+
+        public abstract IEnumerable<string> getStringsToSelect();
+
+        public abstract void setSelectedString(string s);
+
+        public void log(string s)
+        {
+            _log.Add(s);
+        }
+
+        public List<string> GetLog()
+        {
+            return _log;
+        }
+
     }
 }

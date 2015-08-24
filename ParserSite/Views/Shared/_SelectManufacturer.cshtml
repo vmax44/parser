@@ -1,0 +1,12 @@
+﻿@model IEnumerable<string>
+@{
+    var selectlist = from str in Model
+                     select new SelectListItem { Text = str, Value = str };
+    ParserSite.Controllers.ParseState st = (ParserSite.Controllers.ParseState)ViewBag.st;
+}
+@using(Ajax.BeginForm("StartParse2", "ParsedDatas", new AjaxOptions { UpdateTargetId = "ParseResults", })) 
+{
+    @Html.AntiForgeryToken()
+    @Html.ListBox("selectedString", selectlist)
+    <input type="submit" value="Select" />
+}

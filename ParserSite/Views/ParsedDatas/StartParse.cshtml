@@ -1,17 +1,42 @@
 ﻿@{
-    IEnumerable<ParsedData> parsedList = ViewBag.Parsed;
+    ParserSite.Controllers.ParseState st = (ParserSite.Controllers.ParseState)ViewBag.st;
 }
-OrderId: @ViewBag.OrderId <br />
-selectedParts: <br />
-               @foreach(int s in ViewBag.selectedParts) {
-                   @s <br />
-               }
-parsers: <br />
-         @foreach (int p in ViewBag.parsers)
-         {
-             @p <br />
-         }
-log:<br />
-@ViewBag.log
-<br />
-@Html.Partial("_ParsedDataPartial", parsedList)
+<div class="panel-heading">Результат парсинга:</div>
+<div id="ParseResults" class="panel-body">
+
+    OrderId: @ViewBag.OrderId <br />
+    selectedParts: <br />
+    @foreach (int s in st.selectedParts)
+    {
+        @s <br />
+    }
+    parsers: <br />
+    @foreach (int p in st.selectedParsers)
+    {
+        @p <br />
+    }
+    log:<br />
+<pre>
+@foreach (string s in st.log)
+{
+    @s@:\r\n
+}
+</pre>
+    <br />
+    Parsers log:<br />
+<pre>
+@foreach (string s in st.parserslog)
+{
+    @s@:\r\n
+}
+</pre>
+
+    @foreach (var p in st.parsed)
+    {
+        @Html.Partial("_ParsedDataPartial", p.Value)
+    }
+    @using(Html.BeginForm("SaveParse","ParsedDatas")) {
+        @Html.AntiForgeryToken()
+        <input type="submit" class="btn" value="Сохранить в базе" />
+    }
+</div>
