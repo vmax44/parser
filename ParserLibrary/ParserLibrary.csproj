@@ -53,9 +53,6 @@
     <Compile Include="ParserAutodoc.cs" />
     <Compile Include="ParserExist.cs" />
     <Compile Include="ParsersManager.cs" />
-    <Compile Include="ParserWatin.cs" />
-    <Compile Include="ParserWatinAutodoc.cs" />
-    <Compile Include="ParserWatinExist.cs" />
     <Compile Include="parserWebClient.cs">
       <SubType>Component</SubType>
     </Compile>

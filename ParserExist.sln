@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParserExist", "ParserExist\ParserExist.csproj", "{7F78C1EC-0001-4DB9-A9B5-62159B3F3385}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{AD9BDF23-45D1-4218-8288-D2BAC0172AA4}"
 	ProjectSection(SolutionItems) = preProject
 		Performance1.psess = Performance1.psess
@@ -28,16 +26,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{7F78C1EC-0001-4DB9-A9B5-62159B3F3385}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{7F78C1EC-0001-4DB9-A9B5-62159B3F3385}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{7F78C1EC-0001-4DB9-A9B5-62159B3F3385}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{7F78C1EC-0001-4DB9-A9B5-62159B3F3385}.Debug|x86.ActiveCfg = Debug|x86
-		{7F78C1EC-0001-4DB9-A9B5-62159B3F3385}.Debug|x86.Build.0 = Debug|x86
-		{7F78C1EC-0001-4DB9-A9B5-62159B3F3385}.Release|Any CPU.ActiveCfg = Release|x86
-		{7F78C1EC-0001-4DB9-A9B5-62159B3F3385}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{7F78C1EC-0001-4DB9-A9B5-62159B3F3385}.Release|Mixed Platforms.Build.0 = Release|x86
-		{7F78C1EC-0001-4DB9-A9B5-62159B3F3385}.Release|x86.ActiveCfg = Release|x86
-		{7F78C1EC-0001-4DB9-A9B5-62159B3F3385}.Release|x86.Build.0 = Release|x86
 		{DE08A433-882F-4888-886F-46FC04323C84}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DE08A433-882F-4888-886F-46FC04323C84}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DE08A433-882F-4888-886F-46FC04323C84}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
