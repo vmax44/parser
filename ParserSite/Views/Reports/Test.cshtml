@@ -1,0 +1,82 @@
+﻿@model IEnumerable<ParsedData>
+@{
+    ViewBag.Title = "Edit Report";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var ParserTypes = Model.GroupBy(o => o.ParserType.Trim())
+        .OrderBy(o => o.Key)
+        .Select(p => p.Key)
+        .ToList();
+    var Parts = Model.GroupBy(o => o.Part)
+        .Select(p => p.Key)
+        .ToList();
+
+    Dictionary<Part, Dictionary<string, List<ParsedData>>> PartsWithDatas =
+        new Dictionary<Part, Dictionary<string, List<ParsedData>>>();
+    foreach (var part in Parts)
+    {
+        var ParserWithDatas = new Dictionary<string, List<ParsedData>>();
+        for (int i = 0; i < ParserTypes.Count; i++)
+        {
+            var d = Model.Where(o => o.Part == part)
+                .Where(t => t.ParserType == ParserTypes[i])
+                .OrderBy(p => p.Price)
+                .ToList();
+            ParserWithDatas.Add(ParserTypes[i], d);
+        }
+        PartsWithDatas.Add(part, ParserWithDatas);
+    }
+
+}
+
+@section Scripts {
+    @Scripts.Render("~/Scripts/report.js");
+}
+
+<table id="report" class="table table-bordered">
+    <thead>
+        <tr>
+            <th>
+                Каталожный номер
+            </th>
+            <th>
+                Наименование
+            </th>
+            @for (int i = 0; i < ParserTypes.Count; i++)
+            {
+                <th>@ParserTypes[i]</th>
+            }
+            <th>
+                Средняя стоимость
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var Part in Parts)
+        {
+            <tr partid="@Part.Id">
+                <td>@Part.PartNumber</td>
+                <td>@Part.PartName</td>
+                @for (int i = 0; i < ParserTypes.Count; i++)
+                {
+                    <td>
+                        @if (PartsWithDatas[Part][ParserTypes[i]].Count > 0)
+                        {
+                            <select id="toReport" partid="@Part.Id">
+                                @foreach (var p in PartsWithDatas[Part][ParserTypes[i]])
+                                {
+                                    <option value='@p.Id'>@p.Price</option>
+                                }
+                                <option value='0'>-</option>
+
+                            </select>
+                        }
+                    </td>
+                }
+
+                <td>
+                    <div id='summ' partid="@Part.Id"></div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

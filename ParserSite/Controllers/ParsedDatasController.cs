@@ -220,7 +220,12 @@ namespace ParserSite.Controllers
         public ActionResult Index(int OrderId)
         {
             ViewBag.OrderId = OrderId;
-            return PartialView("_ParsedDataPartial", db.ParsedDatas.ToList());
+            var order = db.Orders.Find(OrderId);
+            if (order == null)
+            {
+                return HttpNotFound();
+            }
+            return PartialView("_ParsedDataPartial", order.ParsedDatas.ToList());
         }
 
         // GET: ParsedDatas/Details/5

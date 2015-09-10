@@ -182,6 +182,7 @@
     <Compile Include="Controllers\OrdersController.cs" />
     <Compile Include="Controllers\ParsedDatasController.cs" />
     <Compile Include="Controllers\PartsController.cs" />
+    <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -272,6 +273,7 @@
     <Content Include="Scripts\knockout-3.3.0.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\order_details.js" />
+    <Content Include="Scripts\report.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
@@ -331,6 +333,7 @@
     <Content Include="Views\ParsedDatas\StartParse.cshtml" />
     <Content Include="Views\Shared\_SelectManufacturer.cshtml" />
     <Content Include="Views\Shared\_ParsedDataPartial.cshtml" />
+    <Content Include="Views\Reports\Test.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

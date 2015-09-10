@@ -19,11 +19,9 @@ namespace ParserSite.Controllers
         // GET: Orders
         public ActionResult Index()
         {
-            //var o = db.Orders.Include(c => c.ParsedDatas);
             if (Request.IsAjaxRequest())
             {
                 var o = db.Orders;
-                //Thread.Sleep(5000);
                 return PartialView("IndexAjax", o.ToList());
             }
             else
